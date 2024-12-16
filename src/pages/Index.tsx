@@ -16,7 +16,7 @@ const Index = () => {
                 <span className="block text-primary">Local Vendors</span>
               </h1>
               <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                Find and connect with verified vendors in your area. Easy payments, secure transactions, and reliable service.
+                Connect with trusted local vendors in Kano state. Easy payments, secure transactions, and reliable service.
               </p>
               <div className="mt-10 flex justify-center gap-4">
                 <Link to="/vendors">
