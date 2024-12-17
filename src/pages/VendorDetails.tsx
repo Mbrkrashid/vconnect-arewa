@@ -7,8 +7,26 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
+
+// Currency conversion rates (in production, these would come from an API)
+const CURRENCY_RATES = {
+  USD: 1,
+  NGN: 1200,
+  EUR: 0.92,
+  GBP: 0.79,
+};
+
+type Currency = keyof typeof CURRENCY_RATES;
 
 // Temporary mock data - will be replaced with actual API calls
 const mockVendorDetails = {
@@ -37,11 +55,22 @@ const mockVendorDetails = {
 
 const VendorDetails = () => {
   const { id } = useParams();
+  const [currency, setCurrency] = useState<Currency>("USD");
 
   const { data: vendor, isLoading } = useQuery({
     queryKey: ["vendor", id],
-    queryFn: () => mockVendorDetails, // This will be replaced with actual API call
+    queryFn: () => mockVendorDetails,
   });
+
+  const convertPrice = (priceUSD: number) => {
+    const convertedPrice = priceUSD * CURRENCY_RATES[currency];
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(convertedPrice);
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -50,7 +79,20 @@ const VendorDetails = () => {
   return (
     <div className="container mx-auto py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">{vendor?.name}</h1>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-3xl font-bold">{vendor?.name}</h1>
+          <Select value={currency} onValueChange={(value: Currency) => setCurrency(value)}>
+            <SelectTrigger className="w-[120px]">
+              <SelectValue placeholder="Currency" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="USD">USD ($)</SelectItem>
+              <SelectItem value="NGN">NGN (₦)</SelectItem>
+              <SelectItem value="EUR">EUR (€)</SelectItem>
+              <SelectItem value="GBP">GBP (£)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <p className="text-gray-600">{vendor?.description}</p>
       </div>
 
@@ -85,7 +127,9 @@ const VendorDetails = () => {
               <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
               <p className="text-gray-600 mb-2">{product.description}</p>
               <div className="flex justify-between items-center">
-                <span className="text-lg font-bold">${product.price}</span>
+                <span className="text-lg font-bold">
+                  {convertPrice(product.price)}
+                </span>
                 <Button>Purchase</Button>
               </div>
             </CardContent>
