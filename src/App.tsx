@@ -6,6 +6,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Vendors from "./pages/Vendors";
 import VendorDetails from "./pages/VendorDetails";
+import AdminLayout from "./components/layouts/AdminLayout";
+import Dashboard from "./pages/admin/Dashboard";
+import ManageVendors from "./pages/admin/ManageVendors";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +22,12 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/vendors" element={<Vendors />} />
           <Route path="/vendor/:id" element={<VendorDetails />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="vendors" element={<ManageVendors />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
