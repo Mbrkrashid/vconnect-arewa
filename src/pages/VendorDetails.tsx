@@ -17,6 +17,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
+import { ChatDialog } from "@/components/ChatDialog";
+import { MessageCircle } from "lucide-react";
 
 // Currency conversion rates (in production, these would come from an API)
 const CURRENCY_RATES = {
@@ -56,6 +58,7 @@ const mockVendorDetails = {
 const VendorDetails = () => {
   const { id } = useParams();
   const [currency, setCurrency] = useState<Currency>("USD");
+  const [chatOpen, setChatOpen] = useState(false);
 
   const { data: vendor, isLoading } = useQuery({
     queryKey: ["vendor", id],
@@ -80,7 +83,18 @@ const VendorDetails = () => {
     <div className="container mx-auto py-8">
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-3xl font-bold">{vendor?.name}</h1>
+          <div className="flex items-center gap-4">
+            <h1 className="text-3xl font-bold">{vendor?.name}</h1>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setChatOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <MessageCircle className="h-4 w-4" />
+              Chat with Vendor
+            </Button>
+          </div>
           <Select value={currency} onValueChange={(value: Currency) => setCurrency(value)}>
             <SelectTrigger className="w-[120px]">
               <SelectValue placeholder="Currency" />
@@ -136,6 +150,12 @@ const VendorDetails = () => {
           </Card>
         ))}
       </div>
+
+      <ChatDialog
+        vendorName={vendor?.name || "Vendor"}
+        open={chatOpen}
+        onOpenChange={setChatOpen}
+      />
     </div>
   );
 };
