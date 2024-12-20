@@ -13,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Heart, Share2, Bookmark, Eye } from "lucide-react";
 
 interface ProductCardProps {
   product: {
@@ -26,6 +27,12 @@ interface ProductCardProps {
     discount: number;
     deliveryOptions: string[];
     rewardPoints: number;
+    stats: {
+      views: number;
+      likes: number;
+      shares: number;
+      saves: number;
+    };
   };
   currency: string;
   currencyRate: number;
@@ -99,6 +106,28 @@ export const ProductCard = ({
             Earn {product.rewardPoints} points
           </span>
         </div>
+
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-1">
+              <Eye className="w-4 h-4 text-gray-500" />
+              <span className="text-sm text-gray-500">{product.stats.views}</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <Heart className="w-4 h-4 text-gray-500" />
+              <span className="text-sm text-gray-500">{product.stats.likes}</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <Share2 className="w-4 h-4 text-gray-500" />
+              <span className="text-sm text-gray-500">{product.stats.shares}</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <Bookmark className="w-4 h-4 text-gray-500" />
+              <span className="text-sm text-gray-500">{product.stats.saves}</span>
+            </div>
+          </div>
+        </div>
+
         <div className="flex justify-between items-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

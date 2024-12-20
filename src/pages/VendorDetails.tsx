@@ -5,6 +5,7 @@ import { ChatDialog } from "@/components/ChatDialog";
 import { CustomerDetailsDialog } from "@/components/CustomerDetailsDialog";
 import { ProductCard } from "@/components/vendor/ProductCard";
 import { VendorHeader } from "@/components/vendor/VendorHeader";
+import { VendorStats } from "@/components/vendor/VendorStats";
 
 // Currency conversion rates (in production, these would come from an API)
 const CURRENCY_RATES = {
@@ -16,11 +17,20 @@ const CURRENCY_RATES = {
 
 type Currency = keyof typeof CURRENCY_RATES;
 
-// Temporary mock data - will be replaced with actual API calls
+// Enhanced mock data with analytics
 const mockVendorDetails = {
   id: 1,
   name: "Fashion Hub",
   description: "Quality clothing and accessories",
+  joinedDate: "2024-01-15",
+  stats: {
+    totalSales: 1250,
+    totalRevenue: 25000,
+    averageRating: 4.5,
+    totalProducts: 15,
+    viewsLastMonth: 3000,
+    engagementRate: "12%"
+  },
   products: [
     {
       id: 1,
@@ -33,6 +43,12 @@ const mockVendorDetails = {
       discount: 10,
       deliveryOptions: ["Standard", "Express"],
       rewardPoints: 50,
+      stats: {
+        views: 1200,
+        likes: 45,
+        shares: 12,
+        saves: 30
+      }
     },
     {
       id: 2,
@@ -45,6 +61,12 @@ const mockVendorDetails = {
       discount: 0,
       deliveryOptions: ["Standard"],
       rewardPoints: 75,
+      stats: {
+        views: 800,
+        likes: 35,
+        shares: 8,
+        saves: 20
+      }
     },
   ],
   categories: ["All", "Clothing", "Accessories"],
@@ -84,7 +106,9 @@ const VendorDetails = () => {
         onChatOpen={() => setChatOpen(true)}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {vendor && <VendorStats stats={vendor.stats} joinedDate={vendor.joinedDate} />}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
         {filteredProducts?.map((product) => (
           <ProductCard
             key={product.id}
