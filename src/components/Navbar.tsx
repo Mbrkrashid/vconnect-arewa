@@ -8,7 +8,7 @@ export const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="text-2xl font-bold text-primary">
-              Kano Vendors Connect
+              Vendors Connect Arewa
             </Link>
           </div>
           <div className="flex items-center space-x-4">
