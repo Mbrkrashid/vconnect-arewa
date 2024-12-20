@@ -31,6 +31,8 @@ interface CustomerDetailsForm {
   email: string;
   address: string;
   deliveryOption: "Standard" | "Express";
+  paymentMethod: "Cash" | "OPay";
+  opayWalletId?: string;
 }
 
 export function CustomerDetailsDialog({
@@ -46,15 +48,26 @@ export function CustomerDetailsDialog({
       email: "",
       address: "",
       deliveryOption: "Standard",
+      paymentMethod: "Cash",
+      opayWalletId: "",
     },
   });
 
   const onSubmit = (data: CustomerDetailsForm) => {
     console.log("Order details:", { productId, ...data });
+    
+    if (data.paymentMethod === "OPay" && !data.opayWalletId) {
+      toast.error("Please enter your OPay Wallet ID");
+      return;
+    }
+
+    // Here you would integrate with OPay API in production
     toast.success("Order placed successfully! You earned reward points!");
     onOpenChange(false);
     form.reset();
   };
+
+  const watchPaymentMethod = form.watch("paymentMethod");
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -159,6 +172,59 @@ export function CustomerDetailsDialog({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="paymentMethod"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Payment Method</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="Cash" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Cash on Delivery
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="OPay" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          OPay Wallet
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {watchPaymentMethod === "OPay" && (
+              <FormField
+                control={form.control}
+                name="opayWalletId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>OPay Wallet ID</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your OPay Wallet ID"
+                        {...field}
+                        required
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <Button type="submit" className="w-full">
               Place Order
             </Button>
