@@ -49,6 +49,12 @@ const AdminLayout = () => {
                   Manage Vendors
                 </Link>
                 <Link
+                  to="/admin/inventory"
+                  className="px-4 py-2 hover:bg-gray-100 rounded-md"
+                >
+                  Manage Inventory
+                </Link>
+                <Link
                   to="/admin/products"
                   className="px-4 py-2 hover:bg-gray-100 rounded-md"
                 >
