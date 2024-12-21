@@ -4,28 +4,28 @@ import { Navbar } from "@/components/Navbar";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FEF7CD]/10">
       <Navbar />
       <main>
         {/* Hero Section */}
-        <div className="relative bg-white">
+        <div className="relative bg-gradient-to-b from-[#FEF7CD]/20 to-white">
           <div className="max-w-7xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                <span className="block">Connect with Trusted</span>
-                <span className="block text-primary">Local Vendors</span>
+              <h1 className="text-4xl tracking-tight font-extrabold text-[#403E43] sm:text-5xl md:text-6xl">
+                <span className="block">Arewa Vendors</span>
+                <span className="block text-primary">Connect & Shop</span>
               </h1>
-              <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                Connect with trusted local vendors in Kano state. Easy payments, secure transactions, and reliable service.
+              <p className="mt-3 max-w-md mx-auto text-base text-gray-600 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+                Your trusted marketplace for authentic Northern Nigerian products. Connect with local vendors, shop with confidence.
               </p>
-              <div className="mt-10 flex justify-center gap-4">
-                <Link to="/vendors">
-                  <Button size="lg" className="px-8">
+              <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4 px-4">
+                <Link to="/vendors" className="w-full sm:w-auto">
+                  <Button size="lg" className="w-full sm:w-auto px-8 bg-[#403E43] hover:bg-[#403E43]/90">
                     Find Vendors
                   </Button>
                 </Link>
-                <Link to="/register">
-                  <Button size="lg" variant="outline" className="px-8">
+                <Link to="/register" className="w-full sm:w-auto">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto px-8 border-[#403E43] text-[#403E43] hover:bg-[#403E43]/10">
                     Become a Vendor
                   </Button>
                 </Link>
@@ -35,13 +35,13 @@ const Index = () => {
         </div>
 
         {/* Features Section */}
-        <div className="py-16 bg-gray-50">
+        <div className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-              <div className="text-center">
-                <div className="bg-primary/10 rounded-lg p-6 mb-4">
+              <div className="text-center p-6 rounded-lg bg-[#FEF7CD]/10 hover:bg-[#FEF7CD]/20 transition-colors">
+                <div className="bg-[#FEC6A1]/20 rounded-lg p-6 mb-4 mx-auto w-20 h-20 flex items-center justify-center">
                   <svg
-                    className="w-12 h-12 mx-auto text-primary"
+                    className="w-10 h-10 text-[#403E43]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -54,15 +54,15 @@ const Index = () => {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold">Verified Vendors</h3>
+                <h3 className="text-xl font-semibold text-[#403E43]">Trusted Vendors</h3>
                 <p className="mt-2 text-gray-600">
-                  All vendors are verified and reviewed for quality service
+                  Connect with verified local vendors from across Northern Nigeria
                 </p>
               </div>
-              <div className="text-center">
-                <div className="bg-primary/10 rounded-lg p-6 mb-4">
+              <div className="text-center p-6 rounded-lg bg-[#FEF7CD]/10 hover:bg-[#FEF7CD]/20 transition-colors">
+                <div className="bg-[#FEC6A1]/20 rounded-lg p-6 mb-4 mx-auto w-20 h-20 flex items-center justify-center">
                   <svg
-                    className="w-12 h-12 mx-auto text-primary"
+                    className="w-10 h-10 text-[#403E43]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -75,15 +75,15 @@ const Index = () => {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold">Secure Payments</h3>
+                <h3 className="text-xl font-semibold text-[#403E43]">Secure Payments</h3>
                 <p className="mt-2 text-gray-600">
-                  Safe and secure payment processing for all transactions
+                  Safe transactions with multiple payment options including OPay
                 </p>
               </div>
-              <div className="text-center">
-                <div className="bg-primary/10 rounded-lg p-6 mb-4">
+              <div className="text-center p-6 rounded-lg bg-[#FEF7CD]/10 hover:bg-[#FEF7CD]/20 transition-colors">
+                <div className="bg-[#FEC6A1]/20 rounded-lg p-6 mb-4 mx-auto w-20 h-20 flex items-center justify-center">
                   <svg
-                    className="w-12 h-12 mx-auto text-primary"
+                    className="w-10 h-10 text-[#403E43]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -96,9 +96,9 @@ const Index = () => {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold">Quick Connect</h3>
+                <h3 className="text-xl font-semibold text-[#403E43]">Quick Connect</h3>
                 <p className="mt-2 text-gray-600">
-                  Connect with vendors instantly and get quick responses
+                  Easy communication with vendors through our platform
                 </p>
               </div>
             </div>
