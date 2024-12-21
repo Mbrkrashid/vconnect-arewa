@@ -20,16 +20,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
+import type { Database } from "@/integrations/supabase/types";
 
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  stock_quantity: number;
-  sku: string;
-  category: string;
-}
+type Product = Database['public']['Tables']['products']['Row'];
 
 const ManageInventory = () => {
   const [open, setOpen] = useState(false);
@@ -39,9 +32,9 @@ const ManageInventory = () => {
     queryKey: ["products"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .order("created_at", { ascending: false });
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       return data as Product[];
@@ -60,7 +53,9 @@ const ManageInventory = () => {
       category: formData.get("category") as string,
     };
 
-    const { error } = await supabase.from("products").insert([newProduct]);
+    const { error } = await supabase
+      .from('products')
+      .insert([newProduct]);
 
     if (error) {
       toast({
