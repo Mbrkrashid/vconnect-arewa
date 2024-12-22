@@ -66,7 +66,7 @@ const Index = () => {
                   product: {
                     name: promotion.product.name,
                     description: promotion.product.description || "",
-                    price: Number(promotion.product.price), // Explicitly convert price to number
+                    price: Number(promotion.product.price),
                     images: []
                   },
                   ad_format: promotion.ad_format
@@ -92,7 +92,7 @@ const Index = () => {
               product={{
                 id: product.id,
                 name: product.name,
-                price: Number(product.price), // Explicitly convert price to number
+                price: Number(product.price),
                 description: product.description || "",
                 images: ["/placeholder.svg"],
                 category: product.category || "General",
