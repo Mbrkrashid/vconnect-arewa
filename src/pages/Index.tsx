@@ -25,7 +25,10 @@ const Index = () => {
         .eq("ad_format", "sponsored_product")
         .limit(3);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching promotions:", error);
+        throw error;
+      }
       return data;
     },
   });
@@ -38,7 +41,10 @@ const Index = () => {
         .select("*")
         .limit(6);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching products:", error);
+        throw error;
+      }
       return data;
     },
   });
