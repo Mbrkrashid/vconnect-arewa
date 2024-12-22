@@ -6,19 +6,19 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-[#FEF7CD]/10">
       <Navbar />
-      <main>
+      <main className="pt-16">
         {/* Hero Section */}
         <div className="relative bg-gradient-to-b from-[#FEF7CD]/20 to-white">
           <div className="max-w-7xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h1 className="text-4xl tracking-tight font-extrabold text-[#403E43] sm:text-5xl md:text-6xl">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight font-extrabold text-[#403E43]">
                 <span className="block">Arewa Vendors</span>
                 <span className="block text-primary">Connect & Shop</span>
               </h1>
-              <p className="mt-3 max-w-md mx-auto text-base text-gray-600 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+              <p className="mt-3 max-w-md mx-auto text-sm sm:text-base md:text-lg text-gray-600 md:mt-5 md:max-w-3xl">
                 Your trusted marketplace for authentic Northern Nigerian products. Connect with local vendors, shop with confidence.
               </p>
-              <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4 px-4">
+              <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4 px-4">
                 <Link to="/vendors" className="w-full sm:w-auto">
                   <Button size="lg" className="w-full sm:w-auto px-8 bg-[#403E43] hover:bg-[#403E43]/90">
                     Find Vendors
@@ -35,13 +35,13 @@ const Index = () => {
         </div>
 
         {/* Features Section */}
-        <div className="py-16 bg-white">
+        <div className="py-12 sm:py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-              <div className="text-center p-6 rounded-lg bg-[#FEF7CD]/10 hover:bg-[#FEF7CD]/20 transition-colors">
-                <div className="bg-[#FEC6A1]/20 rounded-lg p-6 mb-4 mx-auto w-20 h-20 flex items-center justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              <div className="text-center p-4 sm:p-6 rounded-lg bg-[#FEF7CD]/10 hover:bg-[#FEF7CD]/20 transition-colors">
+                <div className="bg-[#FEC6A1]/20 rounded-lg p-4 sm:p-6 mb-4 mx-auto w-16 sm:w-20 h-16 sm:h-20 flex items-center justify-center">
                   <svg
-                    className="w-10 h-10 text-[#403E43]"
+                    className="w-8 sm:w-10 h-8 sm:h-10 text-[#403E43]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -54,15 +54,15 @@ const Index = () => {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-[#403E43]">Trusted Vendors</h3>
-                <p className="mt-2 text-gray-600">
+                <h3 className="text-lg sm:text-xl font-semibold text-[#403E43]">Trusted Vendors</h3>
+                <p className="mt-2 text-sm sm:text-base text-gray-600">
                   Connect with verified local vendors from across Northern Nigeria
                 </p>
               </div>
-              <div className="text-center p-6 rounded-lg bg-[#FEF7CD]/10 hover:bg-[#FEF7CD]/20 transition-colors">
-                <div className="bg-[#FEC6A1]/20 rounded-lg p-6 mb-4 mx-auto w-20 h-20 flex items-center justify-center">
+              <div className="text-center p-4 sm:p-6 rounded-lg bg-[#FEF7CD]/10 hover:bg-[#FEF7CD]/20 transition-colors">
+                <div className="bg-[#FEC6A1]/20 rounded-lg p-4 sm:p-6 mb-4 mx-auto w-16 sm:w-20 h-16 sm:h-20 flex items-center justify-center">
                   <svg
-                    className="w-10 h-10 text-[#403E43]"
+                    className="w-8 sm:w-10 h-8 sm:h-10 text-[#403E43]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -75,15 +75,15 @@ const Index = () => {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-[#403E43]">Secure Payments</h3>
-                <p className="mt-2 text-gray-600">
+                <h3 className="text-lg sm:text-xl font-semibold text-[#403E43]">Secure Payments</h3>
+                <p className="mt-2 text-sm sm:text-base text-gray-600">
                   Safe transactions with multiple payment options including OPay
                 </p>
               </div>
-              <div className="text-center p-6 rounded-lg bg-[#FEF7CD]/10 hover:bg-[#FEF7CD]/20 transition-colors">
-                <div className="bg-[#FEC6A1]/20 rounded-lg p-6 mb-4 mx-auto w-20 h-20 flex items-center justify-center">
+              <div className="text-center p-4 sm:p-6 rounded-lg bg-[#FEF7CD]/10 hover:bg-[#FEF7CD]/20 transition-colors">
+                <div className="bg-[#FEC6A1]/20 rounded-lg p-4 sm:p-6 mb-4 mx-auto w-16 sm:w-20 h-16 sm:h-20 flex items-center justify-center">
                   <svg
-                    className="w-10 h-10 text-[#403E43]"
+                    className="w-8 sm:w-10 h-8 sm:h-10 text-[#403E43]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -96,8 +96,8 @@ const Index = () => {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-[#403E43]">Quick Connect</h3>
-                <p className="mt-2 text-gray-600">
+                <h3 className="text-lg sm:text-xl font-semibold text-[#403E43]">Quick Connect</h3>
+                <p className="mt-2 text-sm sm:text-base text-gray-600">
                   Easy communication with vendors through our platform
                 </p>
               </div>

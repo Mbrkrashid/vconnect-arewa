@@ -15,8 +15,12 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          is_promoted: boolean | null
           name: string
           price: number
+          promotion_end_date: string | null
+          promotion_start_date: string | null
+          promotion_type: string | null
           sku: string | null
           stock_quantity: number
           updated_at: string
@@ -26,8 +30,12 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          is_promoted?: boolean | null
           name: string
           price: number
+          promotion_end_date?: string | null
+          promotion_start_date?: string | null
+          promotion_type?: string | null
           sku?: string | null
           stock_quantity?: number
           updated_at?: string
@@ -37,11 +45,117 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          is_promoted?: boolean | null
           name?: string
           price?: number
+          promotion_end_date?: string | null
+          promotion_start_date?: string | null
+          promotion_type?: string | null
           sku?: string | null
           stock_quantity?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      vendor_promotions: {
+        Row: {
+          created_at: string | null
+          end_date: string
+          id: string
+          payment_amount: number | null
+          payment_method: string | null
+          payment_status: string | null
+          product_id: string | null
+          promotion_type: string
+          start_date: string
+          status: string | null
+          updated_at: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          end_date: string
+          id?: string
+          payment_amount?: number | null
+          payment_method?: string | null
+          payment_status?: string | null
+          product_id?: string | null
+          promotion_type: string
+          start_date: string
+          status?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          end_date?: string
+          id?: string
+          payment_amount?: number | null
+          payment_method?: string | null
+          payment_status?: string | null
+          product_id?: string | null
+          promotion_type?: string
+          start_date?: string
+          status?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_promotions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_promotions_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vendors: {
+        Row: {
+          address: string | null
+          business_name: string
+          business_type: string | null
+          created_at: string | null
+          description: string | null
+          email: string
+          id: string
+          is_verified: boolean | null
+          opay_wallet_id: string | null
+          phone_number: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          business_name: string
+          business_type?: string | null
+          created_at?: string | null
+          description?: string | null
+          email: string
+          id?: string
+          is_verified?: boolean | null
+          opay_wallet_id?: string | null
+          phone_number?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          business_name?: string
+          business_type?: string | null
+          created_at?: string | null
+          description?: string | null
+          email?: string
+          id?: string
+          is_verified?: boolean | null
+          opay_wallet_id?: string | null
+          phone_number?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
