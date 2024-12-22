@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SponsoredProduct } from "@/components/ads/SponsoredProduct";
 import { ProductCard } from "@/components/vendor/ProductCard";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -19,8 +20,7 @@ const Index = () => {
             id,
             name,
             description,
-            price,
-            images
+            price
           )
         `)
         .eq("status", "active")
@@ -85,7 +85,7 @@ const Index = () => {
                       name: promotion.product.name,
                       description: promotion.product.description || "",
                       price: Number(promotion.product.price || 0),
-                      images: promotion.product.images || []
+                      images: [] // Since we don't have images in the DB yet, provide an empty array
                     },
                     ad_format: promotion.ad_format
                   }} 
@@ -120,7 +120,7 @@ const Index = () => {
                   name: product.name,
                   price: Number(product.price || 0),
                   description: product.description || "",
-                  images: product.images || ["/placeholder.svg"],
+                  images: [], // Since we don't have images in the DB yet, provide an empty array
                   category: product.category || "General",
                   discount: 0,
                   deliveryOptions: ["Standard Delivery"],
