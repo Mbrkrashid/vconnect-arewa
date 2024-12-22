@@ -11,15 +11,13 @@ export const supabase = createClient<Database>(
     auth: {
       persistSession: true,
       autoRefreshToken: true,
-      detectSessionInUrl: true,
-    },
-    db: {
-      schema: 'public'
+      detectSessionInUrl: true
     },
     global: {
       headers: {
         'Content-Type': 'application/json',
-      },
-    },
+        'Authorization': `Bearer ${supabaseAnonKey}`
+      }
+    }
   }
 );
