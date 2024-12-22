@@ -9,13 +9,7 @@ export const supabase = createClient<Database>(
   supabaseAnonKey,
   {
     auth: {
-      persistSession: true,
-      autoRefreshToken: true
-    },
-    global: {
-      headers: {
-        'Authorization': `Bearer ${supabaseAnonKey}`
-      }
+      persistSession: true
     }
   }
 );
