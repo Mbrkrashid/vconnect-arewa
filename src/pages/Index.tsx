@@ -15,10 +15,10 @@ const Index = () => {
           id,
           ad_format,
           product:products (
+            id,
             name,
             description,
-            price,
-            images
+            price
           )
         `)
         .eq("status", "active")
@@ -53,7 +53,19 @@ const Index = () => {
           <h2 className="text-2xl font-semibold mb-4">Featured Products</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {promotions.map((promotion) => (
-              <SponsoredProduct key={promotion.id} promotion={promotion} />
+              <SponsoredProduct 
+                key={promotion.id} 
+                promotion={{
+                  id: promotion.id,
+                  product: {
+                    name: promotion.product.name,
+                    description: promotion.product.description || "",
+                    price: Number(promotion.product.price),
+                    images: []
+                  },
+                  ad_format: promotion.ad_format
+                }} 
+              />
             ))}
           </div>
         </section>
@@ -74,7 +86,7 @@ const Index = () => {
               product={{
                 id: product.id,
                 name: product.name,
-                price: product.price,
+                price: Number(product.price),
                 description: product.description || "",
                 images: ["/placeholder.svg"],
                 category: product.category || "General",
