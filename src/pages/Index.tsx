@@ -90,7 +90,7 @@ const Index = () => {
             <ProductCard
               key={product.id}
               product={{
-                id: product.id,
+                id: Number(product.id),
                 name: product.name,
                 price: Number(product.price || 0),
                 description: product.description || "",
