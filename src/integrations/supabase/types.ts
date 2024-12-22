@@ -9,6 +9,44 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ad_impressions: {
+        Row: {
+          device_info: Json | null
+          id: string
+          impression_type: string | null
+          location_info: Json | null
+          promotion_id: string | null
+          timestamp: string | null
+          user_id: string | null
+        }
+        Insert: {
+          device_info?: Json | null
+          id?: string
+          impression_type?: string | null
+          location_info?: Json | null
+          promotion_id?: string | null
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          device_info?: Json | null
+          id?: string
+          impression_type?: string | null
+          location_info?: Json | null
+          promotion_id?: string | null
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_impressions_promotion_id_fkey"
+            columns: ["promotion_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_promotions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           category: string | null
@@ -59,46 +97,70 @@ export type Database = {
       }
       vendor_promotions: {
         Row: {
+          ad_format: string | null
+          budget: number | null
+          clicks_count: number | null
           created_at: string | null
+          daily_spend_limit: number | null
           end_date: string
           id: string
           payment_amount: number | null
           payment_method: string | null
           payment_status: string | null
+          performance_metrics: Json | null
           product_id: string | null
           promotion_type: string
           start_date: string
           status: string | null
+          target_audience: string | null
+          targeting_criteria: Json | null
           updated_at: string | null
           vendor_id: string | null
+          views_count: number | null
         }
         Insert: {
+          ad_format?: string | null
+          budget?: number | null
+          clicks_count?: number | null
           created_at?: string | null
+          daily_spend_limit?: number | null
           end_date: string
           id?: string
           payment_amount?: number | null
           payment_method?: string | null
           payment_status?: string | null
+          performance_metrics?: Json | null
           product_id?: string | null
           promotion_type: string
           start_date: string
           status?: string | null
+          target_audience?: string | null
+          targeting_criteria?: Json | null
           updated_at?: string | null
           vendor_id?: string | null
+          views_count?: number | null
         }
         Update: {
+          ad_format?: string | null
+          budget?: number | null
+          clicks_count?: number | null
           created_at?: string | null
+          daily_spend_limit?: number | null
           end_date?: string
           id?: string
           payment_amount?: number | null
           payment_method?: string | null
           payment_status?: string | null
+          performance_metrics?: Json | null
           product_id?: string | null
           promotion_type?: string
           start_date?: string
           status?: string | null
+          target_audience?: string | null
+          targeting_criteria?: Json | null
           updated_at?: string | null
           vendor_id?: string | null
+          views_count?: number | null
         }
         Relationships: [
           {

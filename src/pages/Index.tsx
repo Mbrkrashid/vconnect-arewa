@@ -1,110 +1,111 @@
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { SponsoredProduct } from "@/components/ads/SponsoredProduct";
+import { ProductCard } from "@/components/vendor/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Navbar } from "@/components/Navbar";
 
 const Index = () => {
-  return (
-    <div className="min-h-screen bg-[#FEF7CD]/10">
-      <Navbar />
-      <main className="pt-16">
-        {/* Hero Section */}
-        <div className="relative bg-gradient-to-b from-[#FEF7CD]/20 to-white">
-          <div className="max-w-7xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight font-extrabold text-[#403E43]">
-                <span className="block">Arewa Vendors</span>
-                <span className="block text-primary">Connect & Shop</span>
-              </h1>
-              <p className="mt-3 max-w-md mx-auto text-sm sm:text-base md:text-lg text-gray-600 md:mt-5 md:max-w-3xl">
-                Your trusted marketplace for authentic Northern Nigerian products. Connect with local vendors, shop with confidence.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4 px-4">
-                <Link to="/vendors" className="w-full sm:w-auto">
-                  <Button size="lg" className="w-full sm:w-auto px-8 bg-[#403E43] hover:bg-[#403E43]/90">
-                    Find Vendors
-                  </Button>
-                </Link>
-                <Link to="/register" className="w-full sm:w-auto">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto px-8 border-[#403E43] text-[#403E43] hover:bg-[#403E43]/10">
-                    Become a Vendor
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+  const { data: promotions } = useQuery({
+    queryKey: ["sponsored-products"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("vendor_promotions")
+        .select(`
+          id,
+          ad_format,
+          product:products (
+            name,
+            description,
+            price,
+            images
+          )
+        `)
+        .eq("status", "active")
+        .eq("ad_format", "sponsored_product")
+        .limit(3);
 
-        {/* Features Section */}
-        <div className="py-12 sm:py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-              <div className="text-center p-4 sm:p-6 rounded-lg bg-[#FEF7CD]/10 hover:bg-[#FEF7CD]/20 transition-colors">
-                <div className="bg-[#FEC6A1]/20 rounded-lg p-4 sm:p-6 mb-4 mx-auto w-16 sm:w-20 h-16 sm:h-20 flex items-center justify-center">
-                  <svg
-                    className="w-8 sm:w-10 h-8 sm:h-10 text-[#403E43]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-[#403E43]">Trusted Vendors</h3>
-                <p className="mt-2 text-sm sm:text-base text-gray-600">
-                  Connect with verified local vendors from across Northern Nigeria
-                </p>
-              </div>
-              <div className="text-center p-4 sm:p-6 rounded-lg bg-[#FEF7CD]/10 hover:bg-[#FEF7CD]/20 transition-colors">
-                <div className="bg-[#FEC6A1]/20 rounded-lg p-4 sm:p-6 mb-4 mx-auto w-16 sm:w-20 h-16 sm:h-20 flex items-center justify-center">
-                  <svg
-                    className="w-8 sm:w-10 h-8 sm:h-10 text-[#403E43]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-[#403E43]">Secure Payments</h3>
-                <p className="mt-2 text-sm sm:text-base text-gray-600">
-                  Safe transactions with multiple payment options including OPay
-                </p>
-              </div>
-              <div className="text-center p-4 sm:p-6 rounded-lg bg-[#FEF7CD]/10 hover:bg-[#FEF7CD]/20 transition-colors">
-                <div className="bg-[#FEC6A1]/20 rounded-lg p-4 sm:p-6 mb-4 mx-auto w-16 sm:w-20 h-16 sm:h-20 flex items-center justify-center">
-                  <svg
-                    className="w-8 sm:w-10 h-8 sm:h-10 text-[#403E43]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-[#403E43]">Quick Connect</h3>
-                <p className="mt-2 text-sm sm:text-base text-gray-600">
-                  Easy communication with vendors through our platform
-                </p>
-              </div>
-            </div>
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const { data: featuredProducts } = useQuery({
+    queryKey: ["featured-products"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .limit(6);
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-4xl font-bold mb-8">Welcome to Our Marketplace</h1>
+      
+      {/* Sponsored Products Section */}
+      {promotions && promotions.length > 0 && (
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">Featured Products</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {promotions.map((promotion) => (
+              <SponsoredProduct key={promotion.id} promotion={promotion} />
+            ))}
           </div>
+        </section>
+      )}
+
+      {/* Featured Products */}
+      <section className="mb-12">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold">Latest Products</h2>
+          <Link to="/vendors">
+            <Button variant="outline">View All Products</Button>
+          </Link>
         </div>
-      </main>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredProducts?.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={{
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                description: product.description || "",
+                images: ["/placeholder.svg"],
+                category: product.category || "General",
+                discount: 0,
+                deliveryOptions: ["Standard Delivery"],
+                rewardPoints: 0,
+                stats: {
+                  views: 0,
+                  likes: 0,
+                  shares: 0,
+                  saves: 0,
+                },
+              }}
+              currency="USD"
+              currencyRate={1}
+              onPurchase={() => {}}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="text-center py-12 bg-primary/5 rounded-lg">
+        <h2 className="text-3xl font-bold mb-4">Start Selling Today</h2>
+        <p className="text-lg text-gray-600 mb-6">
+          Join thousands of vendors and start growing your business
+        </p>
+        <Link to="/register">
+          <Button size="lg">Become a Vendor</Button>
+        </Link>
+      </section>
     </div>
   );
 };
