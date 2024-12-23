@@ -1,165 +1,67 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { SponsoredProduct } from "@/components/ads/SponsoredProduct";
-import { ProductCard } from "@/components/vendor/ProductCard";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Navbar } from "@/components/Navbar";
 
 const Index = () => {
-  const { data: promotions, isLoading: isLoadingPromotions, error: promotionsError } = useQuery({
-    queryKey: ["sponsored-products"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("vendor_promotions")
-        .select(`
-          id,
-          ad_format,
-          product:products (
-            id,
-            name,
-            description,
-            price
-          )
-        `)
-        .eq("status", "active")
-        .eq("ad_format", "sponsored_product")
-        .limit(3);
-
-      if (error) {
-        console.error("Error fetching promotions:", error);
-        throw error;
-      }
-      return data;
-    },
-  });
-
-  const { data: featuredProducts, isLoading: isLoadingProducts, error: productsError } = useQuery({
-    queryKey: ["featured-products"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .limit(6);
-
-      if (error) {
-        console.error("Error fetching products:", error);
-        throw error;
-      }
-      return data;
-    },
-  });
-
-  if (promotionsError || productsError) {
-    console.error("Error loading data:", { promotionsError, productsError });
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500">Error loading data. Please try again later.</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 py-16 text-center">
-        <h1 className="text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-          Welcome to Our Marketplace
-        </h1>
-        <p className="text-xl text-gray-600 mb-8">
-          Discover amazing products from verified vendors
-        </p>
-      </section>
+    <div className="min-h-screen bg-white">
+      <Navbar />
       
-      {/* Sponsored Products Section */}
-      {(isLoadingPromotions || promotions?.length > 0) && (
-        <section className="container mx-auto px-4 mb-16">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-semibold">Featured Products</h2>
-            <Badge variant="secondary" className="text-sm">Sponsored</Badge>
+      {/* Hero Section */}
+      <section className="pt-24 pb-16 px-4 md:pt-32">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            Connect with Local Vendors in Kano
+          </h1>
+          <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Discover and connect with trusted local vendors in Kano. From traditional crafts to modern services, find everything you need.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/vendors">
+              <Button size="lg" className="w-full sm:w-auto">
+                Browse Vendors
+              </Button>
+            </Link>
+            <Link to="/register">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                Become a Vendor
+              </Button>
+            </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {isLoadingPromotions ? (
-              Array(3).fill(0).map((_, i) => (
-                <Skeleton key={i} className="h-[300px] rounded-xl" />
-              ))
-            ) : (
-              promotions?.map((promotion) => (
-                <SponsoredProduct 
-                  key={promotion.id} 
-                  promotion={{
-                    id: promotion.id,
-                    product: {
-                      name: promotion.product.name,
-                      description: promotion.product.description || "",
-                      price: Number(promotion.product.price || 0),
-                      images: []
-                    },
-                    ad_format: promotion.ad_format
-                  }} 
-                />
-              ))
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* Latest Products */}
-      <section className="container mx-auto px-4 mb-16">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-semibold">Latest Products</h2>
-          <Link to="/vendors">
-            <Button variant="outline" size="lg">
-              View All Products
-            </Button>
-          </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {isLoadingProducts ? (
-            Array(6).fill(0).map((_, i) => (
-              <Skeleton key={i} className="h-[400px] rounded-xl" />
-            ))
-          ) : (
-            featuredProducts?.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={{
-                  id: Number(product.id),
-                  name: product.name,
-                  price: Number(product.price || 0),
-                  description: product.description || "",
-                  images: [],
-                  category: product.category || "General",
-                  discount: 0,
-                  deliveryOptions: ["Standard Delivery"],
-                  rewardPoints: 0,
-                  stats: {
-                    views: 0,
-                    likes: 0,
-                    shares: 0,
-                    saves: 0,
-                  },
-                }}
-                currency="USD"
-                currencyRate={1}
-                onPurchase={() => {}}
-              />
-            ))
-          )}
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-3xl font-semibold text-center mb-12">Why Choose Us</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="text-xl font-semibold mb-3">Local Trust</h3>
+              <p className="text-gray-600">Connect with verified local vendors you can trust</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="text-xl font-semibold mb-3">Easy Connection</h3>
+              <p className="text-gray-600">Direct communication with vendors through our platform</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="text-xl font-semibold mb-3">Secure Transactions</h3>
+              <p className="text-gray-600">Safe and transparent business dealings</p>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Call to Action */}
-      <section className="container mx-auto px-4 py-16 mb-16">
-        <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-2xl p-12 text-center">
-          <h2 className="text-4xl font-bold mb-6">Start Selling Today</h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Join thousands of vendors and start growing your business with our powerful marketplace platform
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h2 className="text-3xl font-semibold mb-6">Ready to Get Started?</h2>
+          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+            Join our growing community of vendors and customers in Kano
           </p>
           <Link to="/register">
             <Button size="lg" className="px-8">
-              Become a Vendor
+              Register as a Vendor
             </Button>
           </Link>
         </div>

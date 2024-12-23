@@ -47,6 +47,91 @@ export type Database = {
           },
         ]
       }
+      branded_effects: {
+        Row: {
+          created_at: string | null
+          effect_data: Json
+          effect_name: string
+          effect_type: string
+          id: string
+          promotion_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          effect_data: Json
+          effect_name: string
+          effect_type: string
+          id?: string
+          promotion_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          effect_data?: Json
+          effect_name?: string
+          effect_type?: string
+          id?: string
+          promotion_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "branded_effects_promotion_id_fkey"
+            columns: ["promotion_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_promotions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hashtag_challenges: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          end_date: string
+          hashtag: string
+          id: string
+          participation_count: number | null
+          prize_details: Json | null
+          promotion_id: string | null
+          start_date: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          end_date: string
+          hashtag: string
+          id?: string
+          participation_count?: number | null
+          prize_details?: Json | null
+          promotion_id?: string | null
+          start_date: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          end_date?: string
+          hashtag?: string
+          id?: string
+          participation_count?: number | null
+          prize_details?: Json | null
+          promotion_id?: string | null
+          start_date?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hashtag_challenges_promotion_id_fkey"
+            columns: ["promotion_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_promotions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           category: string | null
@@ -98,6 +183,7 @@ export type Database = {
       vendor_promotions: {
         Row: {
           ad_format: string | null
+          ad_placement: string | null
           budget: number | null
           clicks_count: number | null
           created_at: string | null
@@ -120,6 +206,7 @@ export type Database = {
         }
         Insert: {
           ad_format?: string | null
+          ad_placement?: string | null
           budget?: number | null
           clicks_count?: number | null
           created_at?: string | null
@@ -142,6 +229,7 @@ export type Database = {
         }
         Update: {
           ad_format?: string | null
+          ad_placement?: string | null
           budget?: number | null
           clicks_count?: number | null
           created_at?: string | null
