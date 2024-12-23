@@ -40,9 +40,9 @@ export const VideoProductCard = ({
   };
 
   return (
-    <Card className="relative w-full h-[100vh] snap-start">
+    <Card className="relative w-full h-[400px] md:h-[500px] snap-start">
       <video
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover rounded-lg"
         src={product.videoUrl}
         poster={product.thumbnailUrl}
         loop
