@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Index = () => {
-  const { data: promotions, isLoading: isLoadingPromotions } = useQuery({
+  const { data: promotions, isLoading: isLoadingPromotions, error: promotionsError } = useQuery({
     queryKey: ["sponsored-products"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -35,7 +35,7 @@ const Index = () => {
     },
   });
 
-  const { data: featuredProducts, isLoading: isLoadingProducts } = useQuery({
+  const { data: featuredProducts, isLoading: isLoadingProducts, error: productsError } = useQuery({
     queryKey: ["featured-products"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -50,6 +50,15 @@ const Index = () => {
       return data;
     },
   });
+
+  if (promotionsError || productsError) {
+    console.error("Error loading data:", { promotionsError, productsError });
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-red-500">Error loading data. Please try again later.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
@@ -85,7 +94,7 @@ const Index = () => {
                       name: promotion.product.name,
                       description: promotion.product.description || "",
                       price: Number(promotion.product.price || 0),
-                      images: [] // Since we don't have images in the DB yet, provide an empty array
+                      images: []
                     },
                     ad_format: promotion.ad_format
                   }} 
@@ -120,7 +129,7 @@ const Index = () => {
                   name: product.name,
                   price: Number(product.price || 0),
                   description: product.description || "",
-                  images: [], // Since we don't have images in the DB yet, provide an empty array
+                  images: [],
                   category: product.category || "General",
                   discount: 0,
                   deliveryOptions: ["Standard Delivery"],
