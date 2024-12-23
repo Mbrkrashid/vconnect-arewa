@@ -32,18 +32,9 @@ export const RegistrationForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const insertData: VendorInsert = {
-        business_name: values.business_name,
-        email: values.email,
-        phone_number: values.phone_number,
-        address: values.address,
-        business_type: values.business_type,
-        description: values.description,
-      };
-
       const { error } = await supabase
         .from('vendors')
-        .insert(insertData);
+        .insert(values);
 
       if (error) throw error;
 
