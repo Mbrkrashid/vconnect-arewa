@@ -21,6 +21,10 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
+
+// Define the type for the form values based on the vendors table
+type VendorInsert = Database['public']['Tables']['vendors']['Insert'];
 
 const formSchema = z.object({
   business_name: z.string().min(2, "Business name must be at least 2 characters"),
@@ -31,11 +35,9 @@ const formSchema = z.object({
   description: z.string().min(20, "Please provide a brief description of your business"),
 });
 
-type FormValues = z.infer<typeof formSchema>;
-
 export const RegistrationForm = () => {
   const { toast } = useToast();
-  const form = useForm<FormValues>({
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       business_name: "",
@@ -47,18 +49,21 @@ export const RegistrationForm = () => {
     },
   });
 
-  const onSubmit = async (values: FormValues) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      // Explicitly type the insert data to match the vendors table schema
+      const insertData: VendorInsert = {
+        business_name: values.business_name,
+        email: values.email,
+        phone_number: values.phone_number,
+        address: values.address,
+        business_type: values.business_type,
+        description: values.description,
+      };
+
       const { error } = await supabase
         .from('vendors')
-        .insert({
-          business_name: values.business_name,
-          email: values.email,
-          phone_number: values.phone_number,
-          address: values.address,
-          business_type: values.business_type,
-          description: values.description,
-        });
+        .insert(insertData);
 
       if (error) throw error;
 
