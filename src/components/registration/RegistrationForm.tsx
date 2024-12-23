@@ -51,7 +51,14 @@ export const RegistrationForm = () => {
     try {
       const { error } = await supabase
         .from('vendors')
-        .insert(values); // Now we're passing a single object, not an array
+        .insert({
+          business_name: values.business_name,
+          email: values.email,
+          phone_number: values.phone_number,
+          address: values.address,
+          business_type: values.business_type,
+          description: values.description,
+        });
 
       if (error) throw error;
 
