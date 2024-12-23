@@ -11,10 +11,10 @@ const Index = () => {
       <section className="pt-24 pb-16 px-4 md:pt-32">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Connect with Local Vendors in Kano
+            Connect with Local Vendors in Northern Nigeria
           </h1>
           <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Discover and connect with trusted local vendors in Kano. From traditional crafts to modern services, find everything you need.
+            Discover and connect with trusted local vendors in Northern Nigeria. From traditional crafts to modern services, find everything you need.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/vendors">
@@ -57,7 +57,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-semibold mb-6">Ready to Get Started?</h2>
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-            Join our growing community of vendors and customers in Kano
+            Join our growing community of vendors and customers in Northern Nigeria
           </p>
           <Link to="/register">
             <Button size="lg" className="px-8">
