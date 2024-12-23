@@ -23,11 +23,11 @@ import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
-  businessName: z.string().min(2, "Business name must be at least 2 characters"),
+  business_name: z.string().min(2, "Business name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  phoneNumber: z.string().min(11, "Phone number must be at least 11 digits"),
+  phone_number: z.string().min(11, "Phone number must be at least 11 digits"),
   address: z.string().min(10, "Please provide a complete address"),
-  businessType: z.string().min(1, "Please select a business type"),
+  business_type: z.string().min(1, "Please select a business type"),
   description: z.string().min(20, "Please provide a brief description of your business"),
 });
 
@@ -36,11 +36,11 @@ export const RegistrationForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      businessName: "",
+      business_name: "",
       email: "",
-      phoneNumber: "",
+      phone_number: "",
       address: "",
-      businessType: "",
+      business_type: "",
       description: "",
     },
   });
@@ -72,7 +72,7 @@ export const RegistrationForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="businessName"
+          name="business_name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Business Name</FormLabel>
@@ -100,7 +100,7 @@ export const RegistrationForm = () => {
 
         <FormField
           control={form.control}
-          name="phoneNumber"
+          name="phone_number"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Phone Number</FormLabel>
@@ -128,7 +128,7 @@ export const RegistrationForm = () => {
 
         <FormField
           control={form.control}
-          name="businessType"
+          name="business_type"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Business Type</FormLabel>
