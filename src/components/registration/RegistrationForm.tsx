@@ -31,9 +31,11 @@ const formSchema = z.object({
   description: z.string().min(20, "Please provide a brief description of your business"),
 });
 
+type FormValues = z.infer<typeof formSchema>;
+
 export const RegistrationForm = () => {
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       business_name: "",
@@ -45,11 +47,11 @@ export const RegistrationForm = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: FormValues) => {
     try {
       const { error } = await supabase
         .from('vendors')
-        .insert([values]);
+        .insert(values); // Now we're passing a single object, not an array
 
       if (error) throw error;
 
@@ -57,6 +59,8 @@ export const RegistrationForm = () => {
         title: "Registration Successful",
         description: "Welcome to our marketplace! You can now start selling products.",
       });
+      
+      form.reset();
     } catch (error) {
       console.error("Error during registration:", error);
       toast({
