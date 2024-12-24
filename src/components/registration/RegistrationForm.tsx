@@ -41,7 +41,7 @@ export const RegistrationForm = () => {
 
       const { error } = await supabase
         .from('vendors')
-        .insert(vendorData);
+        .insert([vendorData]); // Pass as array to match the overload
 
       if (error) throw error;
 

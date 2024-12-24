@@ -10,7 +10,7 @@ const Index = () => {
   const categories = ["All", "Fashion", "Electronics", "Food", "Beauty", "Home"];
   const mockProducts = [
     {
-      id: "1", // Changed from number to string
+      id: "1",
       name: "Trendy Summer Collection",
       price: 99.99,
       description: "Exclusive summer wear for the fashion-forward generation!",
@@ -27,7 +27,7 @@ const Index = () => {
       }
     },
     {
-      id: "2", // Changed from number to string
+      id: "2",
       name: "Smart Watch Pro",
       price: 199.99,
       description: "Next-gen smartwatch with health tracking features",
@@ -47,7 +47,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/95">
-      {/* Header Section */}
       <section className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-background/95 to-background/80 backdrop-blur-sm border-b border-border/50">
         <div className="container mx-auto px-4">
           <VendorHeader 
@@ -63,7 +62,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Video Feed Section */}
       <section className="pt-32 pb-6">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 snap-y snap-mandatory">
