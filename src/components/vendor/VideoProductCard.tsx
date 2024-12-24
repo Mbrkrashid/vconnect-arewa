@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Share2, ShoppingCart, MessageCircle, Gift } from "lucide-react";
 import { CustomerDetailsDialog } from "@/components/CustomerDetailsDialog";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 interface VideoProductCardProps {
   product: {
@@ -34,6 +36,123 @@ export const VideoProductCard = ({
 }: VideoProductCardProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(product.stats.likes);
+  const [sharesCount, setSharesCount] = useState(product.stats.shares);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    checkIfLiked();
+  }, []);
+
+  const checkIfLiked = async () => {
+    const { data: session } = await supabase.auth.getSession();
+    if (!session?.session?.user) return;
+
+    const { data } = await supabase
+      .from('video_interactions')
+      .select()
+      .eq('video_id', product.id)
+      .eq('user_id', session.session.user.id)
+      .eq('interaction_type', 'like')
+      .maybeSingle();
+
+    setIsLiked(!!data);
+  };
+
+  const handleLike = async () => {
+    const { data: session } = await supabase.auth.getSession();
+    if (!session?.session?.user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to like videos",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      if (isLiked) {
+        await supabase
+          .from('video_interactions')
+          .delete()
+          .eq('video_id', product.id)
+          .eq('user_id', session.session.user.id)
+          .eq('interaction_type', 'like');
+        
+        setLikesCount(prev => prev - 1);
+        setIsLiked(false);
+        toast({
+          title: "Like removed",
+          description: "You've unliked this video",
+        });
+      } else {
+        await supabase
+          .from('video_interactions')
+          .insert({
+            video_id: product.id,
+            user_id: session.session.user.id,
+            interaction_type: 'like'
+          });
+        
+        setLikesCount(prev => prev + 1);
+        setIsLiked(true);
+        toast({
+          title: "Video liked",
+          description: "You've liked this video",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update like status",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      // Implement native share if available
+      if (navigator.share) {
+        await navigator.share({
+          title: product.name,
+          text: product.description,
+          url: window.location.href,
+        });
+
+        const { data: session } = await supabase.auth.getSession();
+        if (session?.session?.user) {
+          await supabase
+            .from('video_interactions')
+            .insert({
+              video_id: product.id,
+              user_id: session.session.user.id,
+              interaction_type: 'share'
+            });
+        }
+
+        setSharesCount(prev => prev + 1);
+        toast({
+          title: "Shared successfully",
+          description: "Thanks for sharing!",
+        });
+      } else {
+        // Fallback to clipboard
+        await navigator.clipboard.writeText(window.location.href);
+        toast({
+          title: "Link copied",
+          description: "Video link copied to clipboard",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to share video",
+        variant: "destructive",
+      });
+    }
+  };
 
   const convertPrice = (priceUSD: number) => {
     const convertedPrice = priceUSD * currencyRate;
@@ -107,13 +226,15 @@ export const VideoProductCard = ({
         <Button
           variant="outline"
           size="icon"
+          onClick={handleLike}
           className={cn(
             "rounded-full bg-black/20 border-white/20 hover:bg-black/40",
-            "backdrop-blur-sm transition-all duration-200 group-hover:scale-110"
+            "backdrop-blur-sm transition-all duration-200 group-hover:scale-110",
+            isLiked && "bg-red-500/50 hover:bg-red-500/70"
           )}
         >
-          <Heart className="w-6 h-6 text-white" />
-          <span className="text-white text-xs mt-1">{product.stats.likes}</span>
+          <Heart className={cn("w-6 h-6 text-white", isLiked && "fill-current")} />
+          <span className="text-white text-xs mt-1">{likesCount}</span>
         </Button>
         <Button
           variant="outline"
@@ -129,13 +250,14 @@ export const VideoProductCard = ({
         <Button
           variant="outline"
           size="icon"
+          onClick={handleShare}
           className={cn(
             "rounded-full bg-black/20 border-white/20 hover:bg-black/40",
             "backdrop-blur-sm transition-all duration-200 group-hover:scale-110"
           )}
         >
           <Share2 className="w-6 h-6 text-white" />
-          <span className="text-white text-xs mt-1">{product.stats.shares}</span>
+          <span className="text-white text-xs mt-1">{sharesCount}</span>
         </Button>
       </div>
 
