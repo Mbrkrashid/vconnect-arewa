@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, Share2, ShoppingCart } from "lucide-react";
+import { Heart, Share2, ShoppingCart, MessageCircle, Gift } from "lucide-react";
 import { CustomerDetailsDialog } from "@/components/CustomerDetailsDialog";
+import { cn } from "@/lib/utils";
 
 interface VideoProductCardProps {
   product: {
@@ -15,6 +16,11 @@ interface VideoProductCardProps {
     stats: {
       likes: number;
       shares: number;
+    };
+    vendor?: {
+      name: string;
+      avatar: string;
+      rewardPoints?: number;
     };
   };
   currency: string;
@@ -40,7 +46,7 @@ export const VideoProductCard = ({
   };
 
   return (
-    <Card className="relative w-full h-[400px] md:h-[500px] snap-start">
+    <Card className="relative w-full h-[600px] md:h-[700px] snap-start overflow-hidden">
       <video
         className="w-full h-full object-cover rounded-lg"
         src={product.videoUrl}
@@ -53,6 +59,31 @@ export const VideoProductCard = ({
         autoPlay
         muted
       />
+      
+      {/* Watermark */}
+      <div className="absolute top-4 right-4 text-white/80 font-semibold text-sm bg-black/30 px-2 py-1 rounded-full">
+        Vendors Connect
+      </div>
+
+      {/* Vendor Profile */}
+      {product.vendor && (
+        <div className="absolute top-4 left-4 flex items-center gap-2">
+          <img
+            src={product.vendor.avatar}
+            alt={product.vendor.name}
+            className="w-10 h-10 rounded-full border-2 border-white"
+          />
+          <div className="text-white">
+            <p className="font-semibold">{product.vendor.name}</p>
+            {product.vendor.rewardPoints && (
+              <p className="text-xs flex items-center gap-1">
+                <Gift className="w-3 h-3" />
+                {product.vendor.rewardPoints} points
+              </p>
+            )}
+          </div>
+        </div>
+      )}
       
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
         <h3 className="text-white text-xl font-semibold mb-2">{product.name}</h3>
@@ -71,12 +102,40 @@ export const VideoProductCard = ({
         </div>
       </div>
 
+      {/* Interaction Buttons */}
       <div className="absolute right-4 bottom-20 flex flex-col gap-4">
-        <Button variant="outline" size="icon" className="rounded-full bg-black/20 border-white/20 hover:bg-black/40">
+        <Button
+          variant="outline"
+          size="icon"
+          className={cn(
+            "rounded-full bg-black/20 border-white/20 hover:bg-black/40",
+            "backdrop-blur-sm transition-all duration-200"
+          )}
+        >
           <Heart className="w-6 h-6 text-white" />
+          <span className="text-white text-xs mt-1">{product.stats.likes}</span>
         </Button>
-        <Button variant="outline" size="icon" className="rounded-full bg-black/20 border-white/20 hover:bg-black/40">
+        <Button
+          variant="outline"
+          size="icon"
+          className={cn(
+            "rounded-full bg-black/20 border-white/20 hover:bg-black/40",
+            "backdrop-blur-sm transition-all duration-200"
+          )}
+        >
+          <MessageCircle className="w-6 h-6 text-white" />
+          <span className="text-white text-xs mt-1">234</span>
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          className={cn(
+            "rounded-full bg-black/20 border-white/20 hover:bg-black/40",
+            "backdrop-blur-sm transition-all duration-200"
+          )}
+        >
           <Share2 className="w-6 h-6 text-white" />
+          <span className="text-white text-xs mt-1">{product.stats.shares}</span>
         </Button>
       </div>
 

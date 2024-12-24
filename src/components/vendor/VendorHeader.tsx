@@ -33,6 +33,11 @@ export const VendorHeader = ({
     <div className="mb-8">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-4">
+          <img
+            src="/lovable-uploads/48779d7e-e936-4511-b4a2-cd75cb9332eb.png"
+            alt="Vendors Connect Logo"
+            className="w-12 h-12"
+          />
           <h1 className="text-3xl font-bold">{vendorName}</h1>
           <Button
             variant="outline"

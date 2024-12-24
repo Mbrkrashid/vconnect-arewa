@@ -18,6 +18,11 @@ const Index = () => {
     stats: {
       likes: 500,
       shares: 200
+    },
+    vendor: {
+      name: "Fashion Store",
+      avatar: "/lovable-uploads/48779d7e-e936-4511-b4a2-cd75cb9332eb.png",
+      rewardPoints: 1500
     }
   };
 
