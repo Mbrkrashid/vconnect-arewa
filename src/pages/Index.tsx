@@ -1,15 +1,40 @@
+import { useState } from "react";
 import { VendorHeader } from "@/components/vendor/VendorHeader";
 import { VideoProductCard } from "@/components/vendor/VideoProductCard";
 
 const Index = () => {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [currency, setCurrency] = useState("USD");
+
+  // Mock data
+  const categories = ["All", "Fashion", "Electronics", "Food"];
+  const mockProduct = {
+    id: 1,
+    name: "Amazing Product",
+    price: 99.99,
+    description: "Check out this incredible item!",
+    videoUrl: "/sample-video.mp4",
+    thumbnailUrl: "/placeholder.svg",
+    stats: {
+      likes: 500,
+      shares: 200
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-r from-primary/10 via-primary/5 to-background">
         <div className="container mx-auto px-4">
           <VendorHeader 
-            title="Welcome to Vendors Connect" 
-            description="Join our marketplace and start selling your products with a 15% commission on sales"
+            vendorName="Welcome to Vendors Connect"
+            vendorDescription="Join our marketplace and start selling your products with a 15% commission on sales"
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+            currency={currency}
+            onCurrencyChange={setCurrency}
+            onChatOpen={() => console.log("Chat opened")}
           />
         </div>
       </section>
@@ -19,16 +44,11 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold mb-8">Trending Products</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Example video cards - replace with real data */}
             <VideoProductCard
-              title="Amazing Product"
-              description="Check out this incredible item!"
-              videoUrl="/sample-video.mp4"
-              viewCount={1000}
-              likeCount={500}
-              shareCount={200}
+              product={mockProduct}
+              currency={currency}
+              currencyRate={currency === "USD" ? 1 : 750} // Example rate for NGN
             />
-            {/* Add more VideoProductCard components as needed */}
           </div>
         </div>
       </section>

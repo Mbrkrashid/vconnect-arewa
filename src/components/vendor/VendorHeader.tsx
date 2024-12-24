@@ -57,10 +57,7 @@ export const VendorHeader = ({
               ))}
             </SelectContent>
           </Select>
-          <Select
-            value={currency}
-            onValueChange={(value) => onCurrencyChange(value)}
-          >
+          <Select value={currency} onValueChange={onCurrencyChange}>
             <SelectTrigger className="w-[120px]">
               <SelectValue placeholder="Currency" />
             </SelectTrigger>
