@@ -83,8 +83,8 @@ export const VideoProductCard = ({
       />
 
       <VideoInteractions
-        likesCount={likesCount}
-        sharesCount={sharesCount}
+        likesCount={Number(likesCount)}
+        sharesCount={Number(sharesCount)}
         isLiked={isLiked}
         onLike={handleLike}
         onShare={handleShare}
