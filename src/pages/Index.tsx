@@ -1,14 +1,65 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
+import { VideoProductCard } from "@/components/vendor/VideoProductCard";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
+  const { data: videos, isLoading } = useQuery({
+    queryKey: ["featured-videos"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("video_content")
+        .select(`
+          *,
+          vendors:vendor_id (
+            business_name,
+            description
+          )
+        `)
+        .order("created_at", { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  // Mock data for development
+  const mockProducts = [
+    {
+      id: 1,
+      name: "Summer Collection 2024",
+      price: 59.99,
+      description: "Exclusive summer wear for the season",
+      videoUrl: "https://example.com/video1.mp4",
+      thumbnailUrl: "/placeholder.svg",
+      stats: {
+        likes: 45,
+        shares: 12,
+      },
+    },
+    {
+      id: 2,
+      name: "Designer Handbag",
+      price: 89.99,
+      description: "Premium leather handbag",
+      videoUrl: "https://example.com/video2.mp4",
+      thumbnailUrl: "/placeholder.svg",
+      stats: {
+        likes: 35,
+        shares: 8,
+      },
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black">
       <Navbar />
       
-      {/* Hero Section */}
-      <section className="pt-24 pb-16 px-4 md:pt-32">
+      {/* Hero Section - Show only when no videos are playing */}
+      <section className="relative pt-24 pb-16 px-4 md:pt-32 bg-gradient-to-b from-white to-gray-100">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             Connect with Local Vendors in Northern Nigeria
@@ -31,39 +82,42 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-semibold text-center mb-12">Why Choose Us</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Local Trust</h3>
-              <p className="text-gray-600">Connect with verified local vendors you can trust</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Easy Connection</h3>
-              <p className="text-gray-600">Direct communication with vendors through our platform</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Secure Transactions</h3>
-              <p className="text-gray-600">Safe and transparent business dealings</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-semibold mb-6">Ready to Get Started?</h2>
-          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-            Join our growing community of vendors and customers in Northern Nigeria
-          </p>
-          <Link to="/register">
-            <Button size="lg" className="px-8">
-              Register as a Vendor
-            </Button>
-          </Link>
+      {/* Video Feed Section */}
+      <section className="max-w-3xl mx-auto py-8">
+        <div className="flex flex-col gap-4 snap-y snap-mandatory">
+          {isLoading ? (
+            <div className="text-white text-center">Loading videos...</div>
+          ) : videos && videos.length > 0 ? (
+            videos.map((video) => (
+              <VideoProductCard
+                key={video.id}
+                product={{
+                  id: video.id,
+                  name: video.title,
+                  price: 0, // Add price to video_content or fetch from products table
+                  description: video.description || "",
+                  videoUrl: video.video_url,
+                  thumbnailUrl: video.thumbnail_url || "/placeholder.svg",
+                  stats: {
+                    likes: video.likes_count,
+                    shares: video.shares_count,
+                  },
+                }}
+                currency="NGN"
+                currencyRate={1200}
+              />
+            ))
+          ) : (
+            // Show mock data for development
+            mockProducts.map((product) => (
+              <VideoProductCard
+                key={product.id}
+                product={product}
+                currency="NGN"
+                currencyRate={1200}
+              />
+            ))
+          )}
         </div>
       </section>
     </div>
