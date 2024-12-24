@@ -15,8 +15,8 @@ interface VideoProductCardProps {
     videoUrl: string;
     thumbnailUrl: string;
     stats: {
-      likes: number;  // Explicitly typed as number
-      shares: number; // Explicitly typed as number
+      likes: number;
+      shares: number;
     };
     vendor?: {
       name: string;
@@ -42,7 +42,11 @@ export const VideoProductCard = ({
     sharesCount,
     handleLike,
     handleShare
-  } = useVideoInteractions(product.id, Number(product.stats.likes), Number(product.stats.shares));
+  } = useVideoInteractions(
+    product.id,
+    product.stats.likes,
+    product.stats.shares
+  );
 
   const convertPrice = (priceUSD: number) => {
     const convertedPrice = priceUSD * currencyRate;
