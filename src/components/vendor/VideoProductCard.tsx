@@ -9,7 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 interface VideoProductCardProps {
   product: {
-    id: number;
+    id: string; // Changed from number to string
     name: string;
     price: number;
     description: string;
