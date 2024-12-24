@@ -4,8 +4,8 @@ import { useToast } from "@/components/ui/use-toast";
 
 export const useVideoInteractions = (videoId: string, initialLikes: number, initialShares: number) => {
   const [isLiked, setIsLiked] = useState(false);
-  const [likesCount, setLikesCount] = useState(initialLikes);
-  const [sharesCount, setSharesCount] = useState(initialShares);
+  const [likesCount, setLikesCount] = useState<number>(initialLikes);
+  const [sharesCount, setSharesCount] = useState<number>(initialShares);
   const { toast } = useToast();
 
   useEffect(() => {
