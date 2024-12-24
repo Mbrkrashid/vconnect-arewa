@@ -15,8 +15,8 @@ interface VideoProductCardProps {
     videoUrl: string;
     thumbnailUrl: string;
     stats: {
-      likes: number;
-      shares: number;
+      likes: number;  // Explicitly typed as number
+      shares: number; // Explicitly typed as number
     };
     vendor?: {
       name: string;
