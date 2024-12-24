@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import type { Database } from "@/integrations/supabase/types";
 import { BusinessInfoFields } from "./BusinessInfoFields";
 import { ContactInfoFields } from "./ContactInfoFields";
 import { BusinessTypeField } from "./BusinessTypeField";
@@ -13,8 +12,6 @@ import { formSchema } from "./registrationSchema";
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { Separator } from "@/components/ui/separator";
-
-type VendorInsert = Database['public']['Tables']['vendors']['Insert'];
 
 export const RegistrationForm = () => {
   const { toast } = useToast();
@@ -32,9 +29,19 @@ export const RegistrationForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      // Ensure all required fields are present
+      const vendorData = {
+        business_name: values.business_name,
+        email: values.email,
+        phone_number: values.phone_number,
+        address: values.address,
+        business_type: values.business_type,
+        description: values.description,
+      };
+
       const { error } = await supabase
         .from('vendors')
-        .insert(values);
+        .insert(vendorData);
 
       if (error) throw error;
 

@@ -8,3 +8,5 @@ export const formSchema = z.object({
   business_type: z.string().min(1, "Please select a business type"),
   description: z.string().min(20, "Please provide a brief description of your business"),
 });
+
+export type RegistrationFormData = z.infer<typeof formSchema>;
