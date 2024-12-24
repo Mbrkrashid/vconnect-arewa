@@ -7,33 +7,52 @@ const Index = () => {
   const [currency, setCurrency] = useState("USD");
 
   // Mock data
-  const categories = ["All", "Fashion", "Electronics", "Food"];
-  const mockProduct = {
-    id: 1,
-    name: "Amazing Product",
-    price: 99.99,
-    description: "Check out this incredible item!",
-    videoUrl: "/sample-video.mp4",
-    thumbnailUrl: "/placeholder.svg",
-    stats: {
-      likes: 500,
-      shares: 200
+  const categories = ["All", "Fashion", "Electronics", "Food", "Beauty", "Home"];
+  const mockProducts = [
+    {
+      id: 1,
+      name: "Trendy Summer Collection",
+      price: 99.99,
+      description: "Exclusive summer wear for the fashion-forward generation!",
+      videoUrl: "/sample-video.mp4",
+      thumbnailUrl: "/placeholder.svg",
+      stats: {
+        likes: 1500,
+        shares: 450
+      },
+      vendor: {
+        name: "Fashion Hub",
+        avatar: "/lovable-uploads/48779d7e-e936-4511-b4a2-cd75cb9332eb.png",
+        rewardPoints: 2500
+      }
     },
-    vendor: {
-      name: "Fashion Store",
-      avatar: "/lovable-uploads/48779d7e-e936-4511-b4a2-cd75cb9332eb.png",
-      rewardPoints: 1500
+    {
+      id: 2,
+      name: "Smart Watch Pro",
+      price: 199.99,
+      description: "Next-gen smartwatch with health tracking features",
+      videoUrl: "/sample-video.mp4",
+      thumbnailUrl: "/placeholder.svg",
+      stats: {
+        likes: 2300,
+        shares: 890
+      },
+      vendor: {
+        name: "Tech Store",
+        avatar: "/lovable-uploads/48779d7e-e936-4511-b4a2-cd75cb9332eb.png",
+        rewardPoints: 3800
+      }
     }
-  };
+  ];
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-r from-primary/10 via-primary/5 to-background">
+      {/* Hero Section with Gradient */}
+      <section className="relative py-12 bg-gradient-to-r from-primary/10 via-primary/5 to-background">
         <div className="container mx-auto px-4">
           <VendorHeader 
-            vendorName="Welcome to Vendors Connect"
-            vendorDescription="Join our marketplace and start selling your products with a 15% commission on sales"
+            vendorName="Vendors Connect"
+            vendorDescription="Discover amazing products from verified vendors"
             categories={categories}
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
@@ -45,15 +64,17 @@ const Index = () => {
       </section>
 
       {/* Video Feed Section */}
-      <section className="py-12">
+      <section className="py-6">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-8">Trending Products</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <VideoProductCard
-              product={mockProduct}
-              currency={currency}
-              currencyRate={currency === "USD" ? 1 : 750} // Example rate for NGN
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 snap-y snap-mandatory">
+            {mockProducts.map((product) => (
+              <VideoProductCard
+                key={product.id}
+                product={product}
+                currency={currency}
+                currencyRate={currency === "USD" ? 1 : 750}
+              />
+            ))}
           </div>
         </div>
       </section>
