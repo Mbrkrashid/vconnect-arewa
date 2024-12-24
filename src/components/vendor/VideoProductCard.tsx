@@ -42,7 +42,7 @@ export const VideoProductCard = ({
     sharesCount,
     handleLike,
     handleShare
-  } = useVideoInteractions(product.id, product.stats.likes, product.stats.shares);
+  } = useVideoInteractions(product.id, Number(product.stats.likes), Number(product.stats.shares));
 
   const convertPrice = (priceUSD: number) => {
     const convertedPrice = priceUSD * currencyRate;
