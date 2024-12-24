@@ -18,7 +18,7 @@ type Currency = keyof typeof CURRENCY_RATES;
 
 // Enhanced mock data with video URLs
 const mockVendorDetails = {
-  id: 1,
+  id: "1", // Changed from number to string
   name: "Fashion Hub",
   description: "Quality clothing and accessories",
   joinedDate: "2024-01-15",
@@ -32,7 +32,7 @@ const mockVendorDetails = {
   },
   products: [
     {
-      id: 1,
+      id: "1", // Changed from number to string
       name: "Summer Collection 2024",
       price: 59.99,
       description: "Exclusive summer wear for the season",
@@ -45,7 +45,7 @@ const mockVendorDetails = {
       }
     },
     {
-      id: 2,
+      id: "2", // Changed from number to string
       name: "Designer Handbag",
       price: 89.99,
       description: "Premium leather handbag",

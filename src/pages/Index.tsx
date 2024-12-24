@@ -10,7 +10,7 @@ const Index = () => {
   const categories = ["All", "Fashion", "Electronics", "Food", "Beauty", "Home"];
   const mockProducts = [
     {
-      id: 1,
+      id: "1", // Changed from number to string
       name: "Trendy Summer Collection",
       price: 99.99,
       description: "Exclusive summer wear for the fashion-forward generation!",
@@ -27,7 +27,7 @@ const Index = () => {
       }
     },
     {
-      id: 2,
+      id: "2", // Changed from number to string
       name: "Smart Watch Pro",
       price: 199.99,
       description: "Next-gen smartwatch with health tracking features",
