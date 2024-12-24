@@ -46,9 +46,9 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Section with Gradient */}
-      <section className="relative py-12 bg-gradient-to-r from-primary/10 via-primary/5 to-background">
+    <div className="min-h-screen bg-gradient-to-b from-background to-background/95">
+      {/* Header Section */}
+      <section className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-background/95 to-background/80 backdrop-blur-sm border-b border-border/50">
         <div className="container mx-auto px-4">
           <VendorHeader 
             vendorName="Vendors Connect"
@@ -64,7 +64,7 @@ const Index = () => {
       </section>
 
       {/* Video Feed Section */}
-      <section className="py-6">
+      <section className="pt-32 pb-6">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 snap-y snap-mandatory">
             {mockProducts.map((product) => (
