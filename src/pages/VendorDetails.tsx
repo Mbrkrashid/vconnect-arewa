@@ -39,30 +39,23 @@ export default function VendorDetails() {
         // Fetch vendor's products
         const { data: productsData, error: productsError } = await supabase
           .from("products")
-          .select(`
-            *,
-            video_content (
-              video_url,
-              thumbnail_url,
-              likes_count,
-              shares_count
-            )
-          `)
+          .select("*")
           .eq("vendor_id", vendorId);
 
         if (productsError) throw productsError;
 
+        // Format products with default video content
         const formattedProducts = productsData.map(product => ({
           id: product.id,
           name: product.name,
           price: product.price,
           description: product.description,
-          videoUrl: product.video_content?.video_url || "",
-          thumbnailUrl: product.video_content?.thumbnail_url || "",
+          videoUrl: "/sample-video.mp4", // Default video URL
+          thumbnailUrl: "/placeholder.svg", // Default thumbnail
           category: product.category,
           stats: {
-            likes: product.video_content?.likes_count || 0,
-            shares: product.video_content?.shares_count || 0,
+            likes: 0,
+            shares: 0
           }
         }));
 

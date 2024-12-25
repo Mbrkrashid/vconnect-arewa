@@ -8,6 +8,7 @@ const Index = () => {
   const [currency, setCurrency] = useState("NGN");
   const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [selectedAmount, setSelectedAmount] = useState<number>(0);
 
   // Mock data
   const categories = ["All", "Fashion", "Electronics", "Food", "Beauty", "Home"];
@@ -51,8 +52,12 @@ const Index = () => {
   ];
 
   const handlePurchase = (productId: string) => {
-    setSelectedProduct(productId);
-    setShowPurchaseDialog(true);
+    const product = mockProducts.find(p => p.id === productId);
+    if (product) {
+      setSelectedProduct(productId);
+      setSelectedAmount(product.price);
+      setShowPurchaseDialog(true);
+    }
   };
 
   return (
@@ -92,6 +97,7 @@ const Index = () => {
         open={showPurchaseDialog}
         onOpenChange={setShowPurchaseDialog}
         productId={selectedProduct}
+        amount={selectedAmount}
         vendorName={selectedProduct ? mockProducts.find(p => p.id === selectedProduct)?.vendor?.name : undefined}
       />
     </div>
