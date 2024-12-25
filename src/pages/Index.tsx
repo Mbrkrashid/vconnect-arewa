@@ -1,20 +1,13 @@
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { VideoProductCard } from "@/components/vendor/VideoProductCard";
 import { CustomerDetailsDialog } from "@/components/CustomerDetailsDialog";
-import { supabase } from "@/integrations/supabase/client";
-import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ShoppingBag, Store, TrendingUp, Star, Gift } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { ShoppingBag, Store, TrendingUp } from "lucide-react";
+import { useState } from "react";
+import { useProducts, Product } from "@/hooks/useProducts";
+import { HeroSection } from "@/components/home/HeroSection";
+import { CategoriesSection } from "@/components/home/CategoriesSection";
 
 const CURRENCY_RATES = {
   NGN: 460.0,
@@ -25,56 +18,12 @@ const CURRENCY_RATES = {
 
 type Currency = keyof typeof CURRENCY_RATES;
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  description: string | null;
-}
-
-const featuredCategories = [
-  { name: "Fashion", icon: <Star className="w-6 h-6" /> },
-  { name: "Electronics", icon: <TrendingUp className="w-6 h-6" /> },
-  { name: "Beauty", icon: <Gift className="w-6 h-6" /> },
-];
-
 const Index = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
   const [currency] = useState<Currency>("NGN");
-  const { toast } = useToast();
-
-  const { data: products, isLoading, error } = useQuery({
-    queryKey: ["featured-products"],
-    queryFn: async () => {
-      try {
-        console.log("Fetching products...");
-        const { data, error } = await supabase
-          .from("products")
-          .select("*")
-          .eq("is_promoted", true)
-          .limit(10);
-
-        if (error) {
-          console.error("Supabase error details:", error);
-          throw error;
-        }
-
-        console.log("Products fetched:", data);
-        return data || [];
-      } catch (err) {
-        console.error("Query error details:", err);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to fetch products. Please try again later.",
-        });
-        throw err;
-      }
-    },
-    retry: 1,
-    retryDelay: 1000,
-  });
+  
+  const { data: products, isLoading, error } = useProducts();
 
   if (error) {
     console.error("Query error:", error);
@@ -113,55 +62,8 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="pt-24 pb-12 px-4">
-        <div className="container mx-auto">
-          <Carousel className="w-full max-w-5xl mx-auto">
-            <CarouselContent>
-              {[1, 2, 3].map((_, index) => (
-                <CarouselItem key={index}>
-                  <div className="relative h-[400px] rounded-xl overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20" />
-                    <img
-                      src={`/placeholder.svg`}
-                      alt={`Slide ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
-                      <h2 className="text-4xl font-bold mb-4">Featured Products</h2>
-                      <p className="text-lg text-white/80">Discover amazing deals from our vendors</p>
-                    </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="left-4" />
-            <CarouselNext className="right-4" />
-          </Carousel>
-        </div>
-      </section>
-
-      {/* Categories */}
-      <section className="py-12 px-4">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-3 gap-4 max-w-3xl mx-auto">
-            {featuredCategories.map((category, index) => (
-              <motion.div
-                key={category.name}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="flex flex-col items-center justify-center p-6 rounded-xl bg-white/5 hover:bg-white/10 transition-colors cursor-pointer group"
-              >
-                <div className="p-4 rounded-full bg-primary/20 group-hover:bg-primary/30 transition-colors mb-4">
-                  {category.icon}
-                </div>
-                <span className="text-lg font-medium">{category.name}</span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HeroSection />
+      <CategoriesSection />
 
       {/* Trending Products */}
       <main className="flex-1 py-12 px-4">
