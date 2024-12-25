@@ -11,6 +11,7 @@ import { DeliveryOptionSelector } from "./delivery/DeliveryOptionSelector";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useForm } from "react-hook-form";
 
 interface CustomerDetailsDialogProps {
   open: boolean;
@@ -28,6 +29,17 @@ export function CustomerDetailsDialog({
   vendorName,
 }: CustomerDetailsDialogProps) {
   const [isProcessing, setIsProcessing] = useState(false);
+  const form = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      address: "",
+      paymentMethod: "Cash",
+      deliveryOption: "Standard",
+      opayWalletId: "",
+    },
+  });
 
   const handleSubmit = async (data: any) => {
     setIsProcessing(true);
@@ -45,7 +57,7 @@ export function CustomerDetailsDialog({
           product_id: productId,
           payment_method: data.paymentMethod,
           status: 'pending',
-          amount: amount, // Add the amount field
+          amount: amount,
           metadata: {
             delivery_option: data.deliveryOption,
             customer_details: {
@@ -79,10 +91,10 @@ export function CustomerDetailsDialog({
           <DialogTitle>Complete Your Purchase</DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-6">
-          <CustomerForm onSubmit={handleSubmit} isProcessing={isProcessing} />
-          <PaymentMethodSelector />
-          <DeliveryOptionSelector />
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <CustomerForm form={form} isProcessing={isProcessing} />
+          <PaymentMethodSelector form={form} />
+          <DeliveryOptionSelector form={form} />
           
           <Button 
             type="submit" 
@@ -91,7 +103,7 @@ export function CustomerDetailsDialog({
           >
             {isProcessing ? "Processing..." : "Place Order"}
           </Button>
-        </div>
+        </form>
       </DialogContent>
     </Dialog>
   );
