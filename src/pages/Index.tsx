@@ -17,22 +17,11 @@ const CURRENCY_RATES = {
 
 type Currency = keyof typeof CURRENCY_RATES;
 
-interface Vendor {
-  business_name: string;
-  is_verified: boolean;
-}
-
 interface Product {
   id: string;
   name: string;
   price: number;
   description: string | null;
-  vendor_promotions: {
-    id: string;
-    ad_format: string | null;
-    targeting_criteria: any;
-  }[];
-  vendors: Vendor[];
 }
 
 const Index = () => {
@@ -40,12 +29,13 @@ const Index = () => {
   const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
   const [currency] = useState<Currency>("NGN");
 
-  const { data: products, isLoading } = useQuery({
+  const { data: products, isLoading, error } = useQuery({
     queryKey: ["featured-products"],
     queryFn: async () => {
+      console.log("Fetching products...");
       const { data, error } = await supabase
         .from("products")
-        .select("*, vendor_promotions!inner(id, ad_format, targeting_criteria), vendors!inner(business_name, is_verified)")
+        .select("*")
         .eq("is_promoted", true)
         .limit(10);
 
@@ -53,9 +43,14 @@ const Index = () => {
         console.error("Error fetching products:", error);
         throw error;
       }
+      console.log("Products fetched:", data);
       return data as Product[];
     },
   });
+
+  if (error) {
+    console.error("Query error:", error);
+  }
 
   if (isLoading) {
     return (
@@ -115,12 +110,10 @@ const Index = () => {
                       shares: 0,
                     },
                     vendor: {
-                      name: product.vendors[0]?.business_name || "Unknown Vendor",
+                      name: "Unknown Vendor",
                       avatar: "/placeholder.svg",
                       rewardPoints: 100,
                     },
-                    isSponsored: !!product.vendor_promotions?.length,
-                    promotionId: product.vendor_promotions?.[0]?.id,
                   }}
                   currency={currency}
                   currencyRate={CURRENCY_RATES[currency]}
@@ -141,7 +134,7 @@ const Index = () => {
           onOpenChange={setShowPurchaseDialog}
           productId={selectedProduct.id}
           amount={selectedProduct.price * CURRENCY_RATES[currency]}
-          vendorName={selectedProduct.vendors[0]?.business_name || "Unknown Vendor"}
+          vendorName="Unknown Vendor"
         />
       )}
     </div>
