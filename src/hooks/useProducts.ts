@@ -21,8 +21,7 @@ export const useProducts = () => {
           .from("products")
           .select("*")
           .eq("is_promoted", true)
-          .limit(10)
-          .throwOnError();
+          .limit(10);
 
         if (error) {
           console.error("Supabase error:", error);
@@ -34,7 +33,11 @@ export const useProducts = () => {
           throw error;
         }
 
-        return data || [];
+        if (!data) {
+          return [];
+        }
+
+        return data;
       } catch (err) {
         console.error("Query error:", err);
         throw err;
