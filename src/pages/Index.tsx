@@ -1,100 +1,139 @@
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { VideoProductCard } from "@/components/vendor/VideoProductCard";
+import { CustomerDetailsDialog } from "@/components/CustomerDetailsDialog";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Navbar } from "@/components/Navbar";
-import { motion } from "framer-motion";
+import { ShoppingBag, Store, TrendingUp } from "lucide-react";
+
+const CURRENCY_RATES = {
+  NGN: 460.0,
+  USD: 1.0,
+  EUR: 0.85,
+  GBP: 0.73,
+};
+
+type Currency = keyof typeof CURRENCY_RATES;
 
 const Index = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <Navbar />
-      
-      <main className="container mx-auto px-4 pt-24 pb-12">
-        {/* Hero Section */}
-        <div className="flex flex-col items-center text-center space-y-8 mt-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="space-y-4"
-          >
-            <h1 className="text-4xl md:text-6xl font-bold text-primary">
-              Vendors Connect Arewa
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Connect with trusted vendors and discover amazing products in Northern Nigeria
-            </p>
-          </motion.div>
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
+  const [currency] = useState<Currency>("NGN");
 
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-col sm:flex-row gap-4 w-full max-w-md mx-auto"
-          >
-            <Link to="/register" className="w-full sm:w-1/2">
-              <Button
-                className="w-full h-12 text-lg bg-primary hover:bg-primary/90"
-                size="lg"
-              >
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["featured-products"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select(`
+          *,
+          vendor_promotions (
+            id,
+            ad_format,
+            targeting_criteria
+          ),
+          vendors (
+            business_name,
+            is_verified
+          )
+        `)
+        .eq("is_promoted", true)
+        .limit(10);
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col min-h-screen bg-black">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-sm border-b border-white/10">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-white">
+            Vendors Connect
+          </h1>
+          <div className="flex items-center gap-4">
+            <Link to="/register">
+              <Button variant="outline" className="text-white border-white/20 hover:bg-white/10">
+                <Store className="w-4 h-4 mr-2" />
                 Become a Vendor
               </Button>
             </Link>
-            <Link to="/vendors" className="w-full sm:w-1/2">
-              <Button
-                variant="outline"
-                className="w-full h-12 text-lg border-primary text-primary hover:bg-primary/10"
-                size="lg"
-              >
-                Browse Vendors
+            <Link to="/vendors">
+              <Button className="bg-primary hover:bg-primary/90">
+                <ShoppingBag className="w-4 h-4 mr-2" />
+                Shop Now
               </Button>
             </Link>
-          </motion.div>
+          </div>
+        </div>
+      </header>
 
-          {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="text-3xl mb-4">🏪</div>
-              <h3 className="text-xl font-semibold mb-2">Trusted Vendors</h3>
-              <p className="text-gray-600">Connect with verified vendors from across Northern Nigeria</p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="text-3xl mb-4">🛍️</div>
-              <h3 className="text-xl font-semibold mb-2">Quality Products</h3>
-              <p className="text-gray-600">Discover high-quality products from local businesses</p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-              className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="text-3xl mb-4">📱</div>
-              <h3 className="text-xl font-semibold mb-2">Easy Mobile Access</h3>
-              <p className="text-gray-600">Shop and manage your business from anywhere</p>
-            </motion.div>
+      {/* Video Feed */}
+      <main className="flex-1 pt-16">
+        <div className="container mx-auto px-4 py-8">
+          {/* Trending Section */}
+          <div className="mb-8">
+            <div className="flex items-center gap-2 text-white/90 mb-4">
+              <TrendingUp className="w-5 h-5" />
+              <h2 className="text-lg font-semibold">Trending Products</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products?.map((product) => (
+                <VideoProductCard
+                  key={product.id}
+                  product={{
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    description: product.description,
+                    videoUrl: "/sample-video.mp4", // Replace with actual video URL
+                    thumbnailUrl: "/placeholder.svg", // Replace with actual thumbnail
+                    stats: {
+                      likes: 0,
+                      shares: 0,
+                    },
+                    vendor: {
+                      name: product.vendors?.business_name,
+                      avatar: "/placeholder.svg", // Replace with actual avatar
+                      rewardPoints: 100,
+                    },
+                    isSponsored: !!product.vendor_promotions?.length,
+                    promotionId: product.vendor_promotions?.[0]?.id,
+                  }}
+                  currency={currency}
+                  currencyRate={CURRENCY_RATES[currency]}
+                  onPurchase={() => {
+                    setSelectedProduct(product);
+                    setShowPurchaseDialog(true);
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white border-t mt-20 py-8">
-        <div className="container mx-auto px-4 text-center text-gray-600">
-          <p>© 2024 Vendors Connect Arewa. All rights reserved.</p>
-        </div>
-      </footer>
+      {selectedProduct && (
+        <CustomerDetailsDialog
+          open={showPurchaseDialog}
+          onOpenChange={setShowPurchaseDialog}
+          productId={selectedProduct.id}
+          amount={selectedProduct.price * CURRENCY_RATES[currency]}
+          vendorName={selectedProduct.vendors?.business_name}
+        />
+      )}
     </div>
   );
 };
