@@ -5,6 +5,8 @@ import { VideoCardHeader } from "./VideoCardHeader";
 import { VideoCardFooter } from "./VideoCardFooter";
 import { VideoInteractions } from "./VideoInteractions";
 import { useVideoInteractions } from "@/hooks/useVideoInteractions";
+import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
 
 interface VideoProductCardProps {
   product: {
@@ -23,6 +25,8 @@ interface VideoProductCardProps {
       avatar: string;
       rewardPoints?: number;
     };
+    isSponsored?: boolean;
+    promotionId?: string;
   };
   currency: string;
   currencyRate: number;
@@ -58,8 +62,36 @@ export const VideoProductCard = ({
     }).format(convertedPrice);
   };
 
+  // Log ad impression when video starts playing
+  const handleVideoPlay = async () => {
+    setIsPlaying(true);
+    if (product.isSponsored && product.promotionId) {
+      try {
+        await supabase.from('ad_impressions').insert({
+          promotion_id: product.promotionId,
+          impression_type: 'view',
+          device_info: {
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+          },
+        });
+      } catch (error) {
+        console.error('Error logging ad impression:', error);
+      }
+    }
+  };
+
   return (
     <Card className="relative w-full h-[600px] md:h-[700px] snap-start overflow-hidden group">
+      {product.isSponsored && (
+        <Badge 
+          variant="secondary" 
+          className="absolute top-4 right-4 z-10 bg-black/50 text-white"
+        >
+          Sponsored
+        </Badge>
+      )}
+      
       <video
         className="w-full h-full object-cover rounded-lg"
         src={product.videoUrl}
@@ -67,7 +99,7 @@ export const VideoProductCard = ({
         loop
         playsInline
         onClick={() => setIsPlaying(!isPlaying)}
-        onPlay={() => setIsPlaying(true)}
+        onPlay={handleVideoPlay}
         onPause={() => setIsPlaying(false)}
         autoPlay
         muted
@@ -94,6 +126,7 @@ export const VideoProductCard = ({
         open={showPurchaseDialog}
         onOpenChange={setShowPurchaseDialog}
         productId={product.id}
+        vendorName={product.vendor?.name}
       />
     </Card>
   );
