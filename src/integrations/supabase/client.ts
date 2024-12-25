@@ -1,12 +1,11 @@
-import { createClient } from '@supabase/supabase-js';
-import type { Database } from './types';
+import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = 'https://yunndukwecnuirfoagmw.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1bm5kdWt3ZWNudWlyZm9hZ213Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDMxNTg0NjAsImV4cCI6MjAxODczNDQ2MH0.HfNtqEhQWbvs5AxzhvfMXvHE7HfqXFDqW1GM9bGrIQM';
+const supabaseUrl = 'https://yunndukwecnuirfoagmw.supabase.co'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1bm5kdWt3ZWNudWlyZm9hZ213Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4MjU2MDAsImV4cCI6MjAyNTQwMTYwMH0.qDlZHVdt3koBMsNwa2L1wz0pVlXWHcmDV9DPY7Qk1Hs'
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
-  },
-});
+  }
+})
