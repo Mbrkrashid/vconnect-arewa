@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ShoppingBag, Store, TrendingUp, Fire, Gift, Star } from "lucide-react";
+import { ShoppingBag, Store, TrendingUp, Star, Gift } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   Carousel,
@@ -34,7 +34,7 @@ interface Product {
 
 const featuredCategories = [
   { name: "Fashion", icon: <Star className="w-6 h-6" /> },
-  { name: "Electronics", icon: <Fire className="w-6 h-6" /> },
+  { name: "Electronics", icon: <TrendingUp className="w-6 h-6" /> },
   { name: "Beauty", icon: <Gift className="w-6 h-6" /> },
 ];
 
