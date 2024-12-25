@@ -4,8 +4,8 @@ import { useToast } from "@/hooks/use-toast";
 
 export const useVideoInteractions = (videoId: string, initialLikes: number, initialShares: number) => {
   const [isLiked, setIsLiked] = useState(false);
-  const [likesCount, setLikesCount] = useState<number>(initialLikes);
-  const [sharesCount, setSharesCount] = useState<number>(initialShares);
+  const [likesCount, setLikesCount] = useState(initialLikes);
+  const [sharesCount, setSharesCount] = useState(initialShares);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export const useVideoInteractions = (videoId: string, initialLikes: number, init
           .eq('user_id', session.session.user.id)
           .eq('interaction_type', 'like');
         
-        setLikesCount((prev) => prev - 1);
+        setLikesCount(prev => prev - 1);
         setIsLiked(false);
         toast({
           title: "Like removed",
@@ -62,7 +62,7 @@ export const useVideoInteractions = (videoId: string, initialLikes: number, init
             interaction_type: 'like'
           });
         
-        setLikesCount((prev) => prev + 1);
+        setLikesCount(prev => prev + 1);
         setIsLiked(true);
         toast({
           title: "Video liked",
@@ -98,7 +98,7 @@ export const useVideoInteractions = (videoId: string, initialLikes: number, init
             });
         }
 
-        setSharesCount((prev) => prev + 1);
+        setSharesCount(prev => prev + 1);
         toast({
           title: "Shared successfully",
           description: "Thanks for sharing!",

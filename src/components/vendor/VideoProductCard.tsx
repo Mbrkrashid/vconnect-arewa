@@ -48,8 +48,8 @@ export const VideoProductCard = ({
     handleShare
   } = useVideoInteractions(
     product.id,
-    Number(product.stats.likes),
-    Number(product.stats.shares)
+    product.stats.likes,
+    product.stats.shares
   );
 
   const convertPrice = (priceUSD: number) => {
@@ -114,8 +114,8 @@ export const VideoProductCard = ({
       />
 
       <VideoInteractions
-        likesCount={Number(likesCount)}
-        sharesCount={Number(sharesCount)}
+        likesCount={likesCount}
+        sharesCount={sharesCount}
         isLiked={isLiked}
         onLike={handleLike}
         onShare={handleShare}
