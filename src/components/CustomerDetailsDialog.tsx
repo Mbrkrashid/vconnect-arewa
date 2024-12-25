@@ -16,6 +16,7 @@ interface CustomerDetailsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   productId: string | null;
+  amount: number;
   vendorName?: string;
 }
 
@@ -23,6 +24,7 @@ export function CustomerDetailsDialog({
   open,
   onOpenChange,
   productId,
+  amount,
   vendorName,
 }: CustomerDetailsDialogProps) {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -43,6 +45,7 @@ export function CustomerDetailsDialog({
           product_id: productId,
           payment_method: data.paymentMethod,
           status: 'pending',
+          amount: amount, // Add the amount field
           metadata: {
             delivery_option: data.deliveryOption,
             customer_details: {

@@ -6,6 +6,7 @@ import { VideoCardFooter } from "./VideoCardFooter";
 import { VideoInteractions } from "./VideoInteractions";
 import { useVideoInteractions } from "@/hooks/useVideoInteractions";
 import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react"; // Add the missing import
 
 interface VideoProductCardProps {
   product: {

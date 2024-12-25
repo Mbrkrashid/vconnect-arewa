@@ -1,124 +1,117 @@
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
-import { ChatDialog } from "@/components/ChatDialog";
-import { VendorHeader } from "@/components/vendor/VendorHeader";
-import { VendorStats } from "@/components/vendor/VendorStats";
 import { VideoProductCard } from "@/components/vendor/VideoProductCard";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { supabase } from "@/integrations/supabase/client";
+import { CustomerDetailsDialog } from "@/components/CustomerDetailsDialog";
 
 const CURRENCY_RATES = {
-  USD: 1,
-  NGN: 1200,
-  EUR: 0.92,
-  GBP: 0.79,
+  NGN: 460.0,
+  USD: 1.0,
+  EUR: 0.85,
+  GBP: 0.73,
 };
 
 type Currency = keyof typeof CURRENCY_RATES;
 
-// Enhanced mock data with video URLs
-const mockVendorDetails = {
-  id: "1", // Changed from number to string
-  name: "Fashion Hub",
-  description: "Quality clothing and accessories",
-  joinedDate: "2024-01-15",
-  stats: {
-    totalSales: 1250,
-    totalRevenue: 25000,
-    averageRating: 4.5,
-    totalProducts: 15,
-    viewsLastMonth: 3000,
-    engagementRate: "12%"
-  },
-  products: [
-    {
-      id: "1", // Changed from number to string
-      name: "Summer Collection 2024",
-      price: 59.99,
-      description: "Exclusive summer wear for the season",
-      videoUrl: "https://example.com/video1.mp4",
-      thumbnailUrl: "/placeholder.svg",
-      category: "Clothing",
-      stats: {
-        likes: 45,
-        shares: 12
+export default function VendorDetails() {
+  const { vendorId } = useParams();
+  const [products, setProducts] = useState([]);
+  const [vendor, setVendor] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currency, setCurrency] = useState<Currency>("NGN");
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
+
+  useEffect(() => {
+    async function fetchVendorAndProducts() {
+      try {
+        // Fetch vendor details
+        const { data: vendorData, error: vendorError } = await supabase
+          .from("vendors")
+          .select("*")
+          .eq("id", vendorId)
+          .single();
+
+        if (vendorError) throw vendorError;
+        setVendor(vendorData);
+
+        // Fetch vendor's products
+        const { data: productsData, error: productsError } = await supabase
+          .from("products")
+          .select(`
+            *,
+            video_content (
+              video_url,
+              thumbnail_url,
+              likes_count,
+              shares_count
+            )
+          `)
+          .eq("vendor_id", vendorId);
+
+        if (productsError) throw productsError;
+
+        const formattedProducts = productsData.map(product => ({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          description: product.description,
+          videoUrl: product.video_content?.video_url || "",
+          thumbnailUrl: product.video_content?.thumbnail_url || "",
+          category: product.category,
+          stats: {
+            likes: product.video_content?.likes_count || 0,
+            shares: product.video_content?.shares_count || 0,
+          }
+        }));
+
+        setProducts(formattedProducts);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-    },
-    {
-      id: "2", // Changed from number to string
-      name: "Designer Handbag",
-      price: 89.99,
-      description: "Premium leather handbag",
-      videoUrl: "https://example.com/video2.mp4",
-      thumbnailUrl: "/placeholder.svg",
-      category: "Accessories",
-      stats: {
-        likes: 35,
-        shares: 8
-      }
-    },
-  ],
-  categories: ["All", "Clothing", "Accessories"],
-};
+    }
 
-const VendorDetails = () => {
-  const { id } = useParams();
-  const [currency, setCurrency] = useState<Currency>("USD");
-  const [chatOpen, setChatOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+    if (vendorId) {
+      fetchVendorAndProducts();
+    }
+  }, [vendorId]);
 
-  const { data: vendor, isLoading } = useQuery({
-    queryKey: ["vendor", id],
-    queryFn: () => mockVendorDetails,
-  });
-
-  const filteredProducts = vendor?.products.filter(
-    (product) => selectedCategory === "All" || product.category === selectedCategory
-  );
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="min-h-screen bg-black">
-      <div className="container mx-auto py-8">
-        <VendorHeader
-          vendorName={vendor?.name || ""}
-          vendorDescription={vendor?.description || ""}
-          categories={vendor?.categories || []}
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-          currency={currency}
-          onCurrencyChange={(value: string) => setCurrency(value as Currency)}
-          onChatOpen={() => setChatOpen(true)}
-        />
+    <div className="container mx-auto py-8">
+      <h1 className="text-2xl font-bold mb-6">
+        {vendor?.business_name}'s Products
+      </h1>
 
-        {vendor && (
-          <VendorStats stats={vendor.stats} joinedDate={vendor.joinedDate} />
-        )}
-
-        <ScrollArea className="h-[calc(100vh-300px)] mt-8">
-          <div className="flex flex-col gap-4 snap-y snap-mandatory">
-            {filteredProducts?.map((product) => (
-              <VideoProductCard
-                key={product.id}
-                product={product}
-                currency={currency}
-                currencyRate={CURRENCY_RATES[currency]}
-              />
-            ))}
-          </div>
-        </ScrollArea>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {products.map((product) => (
+          <VideoProductCard
+            key={product.id}
+            product={product}
+            currency={currency}
+            currencyRate={CURRENCY_RATES[currency]}
+            onPurchase={() => {
+              setSelectedProduct(product);
+              setShowPurchaseDialog(true);
+            }}
+          />
+        ))}
       </div>
 
-      <ChatDialog
-        vendorName={vendor?.name || "Vendor"}
-        open={chatOpen}
-        onOpenChange={setChatOpen}
-      />
+      {selectedProduct && (
+        <CustomerDetailsDialog
+          open={showPurchaseDialog}
+          onOpenChange={setShowPurchaseDialog}
+          productId={selectedProduct.id}
+          amount={selectedProduct.price * CURRENCY_RATES[currency]}
+          vendorName={vendor?.business_name}
+        />
+      )}
     </div>
   );
-};
-
-export default VendorDetails;
+}
