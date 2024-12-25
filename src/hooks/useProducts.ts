@@ -21,7 +21,8 @@ export const useProducts = () => {
           .from("products")
           .select("*")
           .eq("is_promoted", true)
-          .limit(10);
+          .limit(10)
+          .single();
 
         if (error) {
           console.error("Supabase error:", error);
@@ -30,17 +31,13 @@ export const useProducts = () => {
             title: "Error",
             description: "Failed to fetch products. Please try again later.",
           });
-          throw error;
-        }
-
-        if (!data) {
           return [];
         }
 
-        return data;
+        return data ? [data] : [];
       } catch (err) {
         console.error("Query error:", err);
-        throw err;
+        return [];
       }
     },
     retry: 1,
