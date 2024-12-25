@@ -62,7 +62,6 @@ export const VideoProductCard = ({
     }).format(convertedPrice);
   };
 
-  // Log ad impression when video starts playing
   const handleVideoPlay = async () => {
     setIsPlaying(true);
     if (product.isSponsored && product.promotionId) {
@@ -115,8 +114,8 @@ export const VideoProductCard = ({
       />
 
       <VideoInteractions
-        likesCount={Number(likesCount)}
-        sharesCount={Number(sharesCount)}
+        likesCount={likesCount}
+        sharesCount={sharesCount}
         isLiked={isLiked}
         onLike={handleLike}
         onShare={handleShare}

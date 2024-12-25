@@ -47,7 +47,7 @@ export const useVideoInteractions = (videoId: string, initialLikes: number, init
           .eq('user_id', session.session.user.id)
           .eq('interaction_type', 'like');
         
-        setLikesCount(prev => prev - 1);
+        setLikesCount((prev) => prev - 1);
         setIsLiked(false);
         toast({
           title: "Like removed",
@@ -62,7 +62,7 @@ export const useVideoInteractions = (videoId: string, initialLikes: number, init
             interaction_type: 'like'
           });
         
-        setLikesCount(prev => prev + 1);
+        setLikesCount((prev) => prev + 1);
         setIsLiked(true);
         toast({
           title: "Video liked",
@@ -98,7 +98,7 @@ export const useVideoInteractions = (videoId: string, initialLikes: number, init
             });
         }
 
-        setSharesCount(prev => prev + 1);
+        setSharesCount((prev) => prev + 1);
         toast({
           title: "Shared successfully",
           description: "Thanks for sharing!",
