@@ -1,28 +1,19 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  description: string | null;
-}
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
 export const useProducts = () => {
   const { toast } = useToast();
 
   return useQuery({
-    queryKey: ["featured-products"],
+    queryKey: ["promoted-products"],
     queryFn: async () => {
       try {
-        console.log("Fetching products...");
         const { data, error } = await supabase
           .from("products")
           .select("*")
           .eq("is_promoted", true)
-          .limit(10)
-          .single();
+          .limit(10);
 
         if (error) {
           console.error("Supabase error:", error);
@@ -34,13 +25,18 @@ export const useProducts = () => {
           return [];
         }
 
-        return data ? [data] : [];
+        return data || [];
       } catch (err) {
         console.error("Query error:", err);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "An unexpected error occurred. Please try again later.",
+        });
         return [];
       }
     },
     retry: 1,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnWindowFocus: false,
   });
 };
