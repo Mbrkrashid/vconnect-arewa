@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ShoppingBag, Store, TrendingUp } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const CURRENCY_RATES = {
   NGN: 460.0,
@@ -28,24 +29,36 @@ const Index = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
   const [currency] = useState<Currency>("NGN");
+  const { toast } = useToast();
 
   const { data: products, isLoading, error } = useQuery({
     queryKey: ["featured-products"],
     queryFn: async () => {
-      console.log("Fetching products...");
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("is_promoted", true)
-        .limit(10);
+      try {
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .eq("is_promoted", true)
+          .limit(10);
 
-      if (error) {
-        console.error("Error fetching products:", error);
-        throw error;
+        if (error) {
+          console.error("Supabase error:", error);
+          throw error;
+        }
+
+        return data || [];
+      } catch (err) {
+        console.error("Query error:", err);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to fetch products. Please try again later.",
+        });
+        return [];
       }
-
-      return data || [];
     },
+    retry: 2,
+    retryDelay: 1000,
   });
 
   if (error) {
