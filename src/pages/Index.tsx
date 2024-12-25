@@ -1,105 +1,100 @@
-import { useState } from "react";
-import { VendorHeader } from "@/components/vendor/VendorHeader";
-import { VideoProductCard } from "@/components/vendor/VideoProductCard";
-import { CustomerDetailsDialog } from "@/components/CustomerDetailsDialog";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { Navbar } from "@/components/Navbar";
+import { motion } from "framer-motion";
 
 const Index = () => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [currency, setCurrency] = useState("NGN");
-  const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
-  const [selectedAmount, setSelectedAmount] = useState<number>(0);
-
-  // Mock data
-  const categories = ["All", "Fashion", "Electronics", "Food", "Beauty", "Home"];
-  const mockProducts = [
-    {
-      id: "1",
-      name: "Trendy Summer Collection",
-      price: 29999.99,
-      description: "Exclusive summer wear for the fashion-forward generation!",
-      videoUrl: "/sample-video.mp4",
-      thumbnailUrl: "/placeholder.svg",
-      stats: {
-        likes: 1500,
-        shares: 450
-      },
-      vendor: {
-        name: "Fashion Hub",
-        avatar: "/lovable-uploads/48779d7e-e936-4511-b4a2-cd75cb9332eb.png",
-        rewardPoints: 2500
-      },
-      isSponsored: true,
-      promotionId: "promo-123"
-    },
-    {
-      id: "2",
-      name: "Smart Watch Pro",
-      price: 89999.99,
-      description: "Next-gen smartwatch with health tracking features",
-      videoUrl: "/sample-video.mp4",
-      thumbnailUrl: "/placeholder.svg",
-      stats: {
-        likes: 2300,
-        shares: 890
-      },
-      vendor: {
-        name: "Tech Store",
-        avatar: "/lovable-uploads/48779d7e-e936-4511-b4a2-cd75cb9332eb.png",
-        rewardPoints: 3800
-      }
-    }
-  ];
-
-  const handlePurchase = (productId: string) => {
-    const product = mockProducts.find(p => p.id === productId);
-    if (product) {
-      setSelectedProduct(productId);
-      setSelectedAmount(product.price);
-      setShowPurchaseDialog(true);
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-background/95">
-      <section className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-background/95 to-background/80 backdrop-blur-sm border-b border-border/50">
-        <div className="container mx-auto px-4">
-          <VendorHeader 
-            vendorName="Vendors Connect"
-            vendorDescription="Discover amazing products from verified vendors"
-            categories={categories}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-            currency={currency}
-            onCurrencyChange={setCurrency}
-            onChatOpen={() => console.log("Chat opened")}
-          />
-        </div>
-      </section>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      <Navbar />
+      
+      <main className="container mx-auto px-4 pt-24 pb-12">
+        {/* Hero Section */}
+        <div className="flex flex-col items-center text-center space-y-8 mt-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="space-y-4"
+          >
+            <h1 className="text-4xl md:text-6xl font-bold text-primary">
+              Vendors Connect Arewa
+            </h1>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Connect with trusted vendors and discover amazing products in Northern Nigeria
+            </p>
+          </motion.div>
 
-      <section className="pt-32 pb-6">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 snap-y snap-mandatory">
-            {mockProducts.map((product) => (
-              <VideoProductCard
-                key={product.id}
-                product={product}
-                currency={currency}
-                currencyRate={currency === "USD" ? 1 : 750}
-                onPurchase={() => handlePurchase(product.id)}
-              />
-            ))}
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex flex-col sm:flex-row gap-4 w-full max-w-md mx-auto"
+          >
+            <Link to="/register" className="w-full sm:w-1/2">
+              <Button
+                className="w-full h-12 text-lg bg-primary hover:bg-primary/90"
+                size="lg"
+              >
+                Become a Vendor
+              </Button>
+            </Link>
+            <Link to="/vendors" className="w-full sm:w-1/2">
+              <Button
+                variant="outline"
+                className="w-full h-12 text-lg border-primary text-primary hover:bg-primary/10"
+                size="lg"
+              >
+                Browse Vendors
+              </Button>
+            </Link>
+          </motion.div>
+
+          {/* Features Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="text-3xl mb-4">🏪</div>
+              <h3 className="text-xl font-semibold mb-2">Trusted Vendors</h3>
+              <p className="text-gray-600">Connect with verified vendors from across Northern Nigeria</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="text-3xl mb-4">🛍️</div>
+              <h3 className="text-xl font-semibold mb-2">Quality Products</h3>
+              <p className="text-gray-600">Discover high-quality products from local businesses</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="text-3xl mb-4">📱</div>
+              <h3 className="text-xl font-semibold mb-2">Easy Mobile Access</h3>
+              <p className="text-gray-600">Shop and manage your business from anywhere</p>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </main>
 
-      <CustomerDetailsDialog
-        open={showPurchaseDialog}
-        onOpenChange={setShowPurchaseDialog}
-        productId={selectedProduct}
-        amount={selectedAmount}
-        vendorName={selectedProduct ? mockProducts.find(p => p.id === selectedProduct)?.vendor?.name : undefined}
-      />
+      {/* Footer */}
+      <footer className="bg-white border-t mt-20 py-8">
+        <div className="container mx-auto px-4 text-center text-gray-600">
+          <p>© 2024 Vendors Connect Arewa. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };
