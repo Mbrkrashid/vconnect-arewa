@@ -32,7 +32,7 @@ interface Product {
     ad_format: string | null;
     targeting_criteria: any;
   }[];
-  vendors: Vendor;
+  vendors: Vendor[];  // Changed to array to match Supabase response
 }
 
 const Index = () => {
@@ -52,7 +52,7 @@ const Index = () => {
             ad_format,
             targeting_criteria
           ),
-          vendors!inner (
+          vendors (
             business_name,
             is_verified
           )
@@ -123,7 +123,7 @@ const Index = () => {
                       shares: 0,
                     },
                     vendor: {
-                      name: product.vendors.business_name,
+                      name: product.vendors[0]?.business_name || "Unknown Vendor", // Access first vendor from array
                       avatar: "/placeholder.svg", // Replace with actual avatar
                       rewardPoints: 100,
                     },
@@ -149,7 +149,7 @@ const Index = () => {
           onOpenChange={setShowPurchaseDialog}
           productId={selectedProduct.id}
           amount={selectedProduct.price * CURRENCY_RATES[currency]}
-          vendorName={selectedProduct.vendors.business_name}
+          vendorName={selectedProduct.vendors[0]?.business_name || "Unknown Vendor"}
         />
       )}
     </div>
