@@ -12,6 +12,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useForm } from "react-hook-form";
+import { Form } from "@/components/ui/form";
 
 interface CustomerDetailsDialogProps {
   open: boolean;
@@ -91,19 +92,21 @@ export function CustomerDetailsDialog({
           <DialogTitle>Complete Your Purchase</DialogTitle>
         </DialogHeader>
         
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-          <CustomerForm form={form} isProcessing={isProcessing} />
-          <PaymentMethodSelector form={form} />
-          <DeliveryOptionSelector form={form} />
-          
-          <Button 
-            type="submit" 
-            className="w-full"
-            disabled={isProcessing}
-          >
-            {isProcessing ? "Processing..." : "Place Order"}
-          </Button>
-        </form>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+            <CustomerForm form={form} isProcessing={isProcessing} />
+            <PaymentMethodSelector form={form} />
+            <DeliveryOptionSelector form={form} />
+            
+            <Button 
+              type="submit" 
+              className="w-full"
+              disabled={isProcessing}
+            >
+              {isProcessing ? "Processing..." : "Place Order"}
+            </Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
