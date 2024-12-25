@@ -32,7 +32,7 @@ interface Product {
     ad_format: string | null;
     targeting_criteria: any;
   }[];
-  vendors: Vendor[];  // Changed to array to match Supabase response
+  vendors: Vendor[];
 }
 
 const Index = () => {
@@ -45,22 +45,14 @@ const Index = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select(`
-          *,
-          vendor_promotions (
-            id,
-            ad_format,
-            targeting_criteria
-          ),
-          vendors (
-            business_name,
-            is_verified
-          )
-        `)
+        .select("*, vendor_promotions!inner(id, ad_format, targeting_criteria), vendors!inner(business_name, is_verified)")
         .eq("is_promoted", true)
         .limit(10);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching products:", error);
+        throw error;
+      }
       return data as Product[];
     },
   });
@@ -116,15 +108,15 @@ const Index = () => {
                     name: product.name,
                     price: product.price,
                     description: product.description || "",
-                    videoUrl: "/sample-video.mp4", // Replace with actual video URL
-                    thumbnailUrl: "/placeholder.svg", // Replace with actual thumbnail
+                    videoUrl: "/sample-video.mp4",
+                    thumbnailUrl: "/placeholder.svg",
                     stats: {
                       likes: 0,
                       shares: 0,
                     },
                     vendor: {
-                      name: product.vendors[0]?.business_name || "Unknown Vendor", // Access first vendor from array
-                      avatar: "/placeholder.svg", // Replace with actual avatar
+                      name: product.vendors[0]?.business_name || "Unknown Vendor",
+                      avatar: "/placeholder.svg",
                       rewardPoints: 100,
                     },
                     isSponsored: !!product.vendor_promotions?.length,
