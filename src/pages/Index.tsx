@@ -35,29 +35,32 @@ const Index = () => {
     queryKey: ["featured-products"],
     queryFn: async () => {
       try {
+        console.log("Fetching products...");
         const { data, error } = await supabase
           .from("products")
           .select("*")
           .eq("is_promoted", true)
-          .limit(10);
+          .limit(10)
+          .throwOnError();
 
         if (error) {
-          console.error("Supabase error:", error);
+          console.error("Supabase error details:", error);
           throw error;
         }
 
+        console.log("Products fetched:", data);
         return data || [];
       } catch (err) {
-        console.error("Query error:", err);
+        console.error("Query error details:", err);
         toast({
           variant: "destructive",
           title: "Error",
           description: "Failed to fetch products. Please try again later.",
         });
-        return [];
+        throw err;
       }
     },
-    retry: 2,
+    retry: 1,
     retryDelay: 1000,
   });
 
