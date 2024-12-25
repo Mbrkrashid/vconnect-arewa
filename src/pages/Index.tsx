@@ -37,17 +37,15 @@ const Index = () => {
         .from("products")
         .select("*")
         .eq("is_promoted", true)
-        .limit(10)
-        .throwOnError();
+        .limit(10);
 
       if (error) {
         console.error("Error fetching products:", error);
         throw error;
       }
 
-      return data as Product[];
+      return data || [];
     },
-    retry: 1,
   });
 
   if (error) {
