@@ -17,8 +17,26 @@ const CURRENCY_RATES = {
 
 type Currency = keyof typeof CURRENCY_RATES;
 
+interface Vendor {
+  business_name: string;
+  is_verified: boolean;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  description: string | null;
+  vendor_promotions: {
+    id: string;
+    ad_format: string | null;
+    targeting_criteria: any;
+  }[];
+  vendors: Vendor;
+}
+
 const Index = () => {
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
   const [currency] = useState<Currency>("NGN");
 
@@ -34,7 +52,7 @@ const Index = () => {
             ad_format,
             targeting_criteria
           ),
-          vendors (
+          vendors!inner (
             business_name,
             is_verified
           )
@@ -43,7 +61,7 @@ const Index = () => {
         .limit(10);
 
       if (error) throw error;
-      return data;
+      return data as Product[];
     },
   });
 
@@ -97,7 +115,7 @@ const Index = () => {
                     id: product.id,
                     name: product.name,
                     price: product.price,
-                    description: product.description,
+                    description: product.description || "",
                     videoUrl: "/sample-video.mp4", // Replace with actual video URL
                     thumbnailUrl: "/placeholder.svg", // Replace with actual thumbnail
                     stats: {
@@ -105,7 +123,7 @@ const Index = () => {
                       shares: 0,
                     },
                     vendor: {
-                      name: product.vendors?.business_name,
+                      name: product.vendors.business_name,
                       avatar: "/placeholder.svg", // Replace with actual avatar
                       rewardPoints: 100,
                     },
@@ -131,7 +149,7 @@ const Index = () => {
           onOpenChange={setShowPurchaseDialog}
           productId={selectedProduct.id}
           amount={selectedProduct.price * CURRENCY_RATES[currency]}
-          vendorName={selectedProduct.vendors?.business_name}
+          vendorName={selectedProduct.vendors.business_name}
         />
       )}
     </div>
