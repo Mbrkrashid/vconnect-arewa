@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { VendorHeader } from "@/components/vendor/VendorHeader";
 import { VideoProductCard } from "@/components/vendor/VideoProductCard";
+import { CustomerDetailsDialog } from "@/components/CustomerDetailsDialog";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [currency, setCurrency] = useState("USD");
+  const [currency, setCurrency] = useState("NGN");
+  const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
   // Mock data
   const categories = ["All", "Fashion", "Electronics", "Food", "Beauty", "Home"];
@@ -12,7 +15,7 @@ const Index = () => {
     {
       id: "1",
       name: "Trendy Summer Collection",
-      price: 99.99,
+      price: 29999.99,
       description: "Exclusive summer wear for the fashion-forward generation!",
       videoUrl: "/sample-video.mp4",
       thumbnailUrl: "/placeholder.svg",
@@ -24,12 +27,14 @@ const Index = () => {
         name: "Fashion Hub",
         avatar: "/lovable-uploads/48779d7e-e936-4511-b4a2-cd75cb9332eb.png",
         rewardPoints: 2500
-      }
+      },
+      isSponsored: true,
+      promotionId: "promo-123"
     },
     {
       id: "2",
       name: "Smart Watch Pro",
-      price: 199.99,
+      price: 89999.99,
       description: "Next-gen smartwatch with health tracking features",
       videoUrl: "/sample-video.mp4",
       thumbnailUrl: "/placeholder.svg",
@@ -44,6 +49,11 @@ const Index = () => {
       }
     }
   ];
+
+  const handlePurchase = (productId: string) => {
+    setSelectedProduct(productId);
+    setShowPurchaseDialog(true);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/95">
@@ -71,11 +81,19 @@ const Index = () => {
                 product={product}
                 currency={currency}
                 currencyRate={currency === "USD" ? 1 : 750}
+                onPurchase={() => handlePurchase(product.id)}
               />
             ))}
           </div>
         </div>
       </section>
+
+      <CustomerDetailsDialog
+        open={showPurchaseDialog}
+        onOpenChange={setShowPurchaseDialog}
+        productId={selectedProduct}
+        vendorName={selectedProduct ? mockProducts.find(p => p.id === selectedProduct)?.vendor?.name : undefined}
+      />
     </div>
   );
 };

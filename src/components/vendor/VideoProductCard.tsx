@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CustomerDetailsDialog } from "@/components/CustomerDetailsDialog";
+import { Badge } from "@/components/ui/badge";
 import { VideoCardHeader } from "./VideoCardHeader";
 import { VideoCardFooter } from "./VideoCardFooter";
 import { VideoInteractions } from "./VideoInteractions";
 import { useVideoInteractions } from "@/hooks/useVideoInteractions";
-import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 
 interface VideoProductCardProps {
@@ -30,15 +29,16 @@ interface VideoProductCardProps {
   };
   currency: string;
   currencyRate: number;
+  onPurchase: () => void;
 }
 
 export const VideoProductCard = ({
   product,
   currency,
   currencyRate,
+  onPurchase,
 }: VideoProductCardProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
   
   const {
     isLiked,
@@ -110,7 +110,7 @@ export const VideoProductCard = ({
         name={product.name}
         description={product.description}
         price={convertPrice(product.price)}
-        onPurchase={() => setShowPurchaseDialog(true)}
+        onPurchase={onPurchase}
       />
 
       <VideoInteractions
@@ -119,13 +119,6 @@ export const VideoProductCard = ({
         isLiked={isLiked}
         onLike={handleLike}
         onShare={handleShare}
-      />
-
-      <CustomerDetailsDialog
-        open={showPurchaseDialog}
-        onOpenChange={setShowPurchaseDialog}
-        productId={product.id}
-        vendorName={product.vendor?.name}
       />
     </Card>
   );
