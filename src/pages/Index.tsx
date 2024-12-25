@@ -53,8 +53,7 @@ const Index = () => {
           .from("products")
           .select("*")
           .eq("is_promoted", true)
-          .limit(10)
-          .throwOnError();
+          .limit(10);
 
         if (error) {
           console.error("Supabase error details:", error);
