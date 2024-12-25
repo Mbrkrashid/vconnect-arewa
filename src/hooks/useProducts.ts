@@ -21,7 +21,8 @@ export const useProducts = () => {
           .from("products")
           .select("*")
           .eq("is_promoted", true)
-          .limit(10);
+          .limit(10)
+          .throwOnError();
 
         if (error) {
           console.error("Supabase error:", error);
@@ -39,5 +40,7 @@ export const useProducts = () => {
         throw err;
       }
     },
+    retry: 1,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
