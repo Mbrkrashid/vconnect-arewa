@@ -1,14 +1,11 @@
-import { createClient } from '@supabase/supabase-js'
-import type { Database } from './types'
+import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://yunndukwecnuirfoagmw.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1bm5kdWt3ZWNudWlyZm9hZ213Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4MjU2MDAsImV4cCI6MjAyNTQwMTYwMH0.qDlZHVdt3koBMsNwa2L1wz0pVlXWHcmDV9DPY7Qk1Hs'
+const supabaseUrl = 'https://yunndukwecnuirfoagmw.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1bm5kdWt3ZWNudWlyZm9hZ213Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4MjY1NzAsImV4cCI6MjAyNTQwMjU3MH0.qDlZHnHGDqK-JxLLHYpxfPb8YrEPzaoXVVJyltBICbk';
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: true,
-    storageKey: 'vendorsconnect-storage-key'
-  }
-})
+    storageKey: 'vendors-connect-storage-key',
+  },
+});
