@@ -9,22 +9,28 @@ export interface Product {
 }
 
 export const fetchProducts = async (): Promise<Product[]> => {
-  const { data, error } = await supabase
-    .from('products')
-    .select('*')
-    .limit(10);
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .limit(10);
 
-  if (error) {
-    console.error('Error fetching products:', {
-      message: error.message,
-      details: error.details,
-      hint: error.hint,
-      code: error.code
-    });
+    if (error) {
+      console.error('Error fetching products:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code,
+        status: error.status
+      });
+      throw error;
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error('Unexpected error fetching products:', error);
     throw error;
   }
-
-  return data || [];
 };
 
 export const useProducts = () => {
