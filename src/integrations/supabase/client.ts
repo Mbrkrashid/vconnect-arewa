@@ -8,6 +8,9 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
-    storageKey: 'vendorsconnect-storage-key'
+    storageKey: 'vendorsconnect-storage-key',
+  },
+  db: {
+    schema: 'public'
   }
 })
