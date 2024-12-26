@@ -9,6 +9,7 @@ export interface Product {
 }
 
 export const fetchProducts = async (): Promise<Product[]> => {
+  console.log('Fetching products...');
   const { data, error } = await supabase
     .from('products')
     .select('id, name, description, price')
@@ -16,9 +17,10 @@ export const fetchProducts = async (): Promise<Product[]> => {
 
   if (error) {
     console.error('Error fetching products:', error);
-    throw new Error(`Failed to fetch products: ${error.message}`);
+    throw error;
   }
 
+  console.log('Products fetched:', data);
   return data || [];
 };
 
@@ -26,7 +28,7 @@ export const useProducts = () => {
   return useQuery({
     queryKey: ['products'],
     queryFn: fetchProducts,
-    retry: 2,
+    retry: 1,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
