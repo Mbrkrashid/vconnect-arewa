@@ -12,8 +12,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .limit(10)
-    .throwOnError();
+    .limit(10);
 
   if (error) {
     console.error('Error fetching products:', error);
