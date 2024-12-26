@@ -11,7 +11,7 @@ type BusinessInfoFieldsProps = {
 
 export const BusinessInfoFields = ({ form }: BusinessInfoFieldsProps) => {
   return (
-    <>
+    <div className="space-y-4">
       <FormField
         control={form.control}
         name="business_name"
@@ -35,7 +35,7 @@ export const BusinessInfoFields = ({ form }: BusinessInfoFieldsProps) => {
             <FormControl>
               <Textarea 
                 placeholder="Tell us about your business" 
-                className="min-h-[100px]"
+                className="min-h-[100px] resize-none"
                 {...field} 
               />
             </FormControl>
@@ -43,6 +43,6 @@ export const BusinessInfoFields = ({ form }: BusinessInfoFieldsProps) => {
           </FormItem>
         )}
       />
-    </>
+    </div>
   );
 };
