@@ -20,8 +20,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
         message: error.message,
         details: error.details,
         hint: error.hint,
-        code: error.code,
-        status: error.status
+        code: error.code
       });
       throw error;
     }
