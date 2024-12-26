@@ -47,7 +47,7 @@ const Index = () => {
           </h1>
           <div className="flex items-center gap-4">
             <Link to="/register">
-              <Button variant="outline" className="text-white border-white/20 hover:bg-white/10">
+              <Button className="bg-primary hover:bg-primary/90 text-white">
                 <Store className="w-4 h-4 mr-2" />
                 Become a Vendor
               </Button>
