@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ShoppingBag, Store, Home, Search, User } from "lucide-react";
 import { useState } from "react";
-import { useProducts } from "@/hooks/useProducts";
+import { useProducts, Product } from "@/hooks/useProducts";
 import { HeroSection } from "@/components/home/HeroSection";
 import { CategoriesSection } from "@/components/home/CategoriesSection";
 
