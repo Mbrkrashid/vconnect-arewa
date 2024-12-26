@@ -12,7 +12,6 @@ export const fetchProducts = async (): Promise<Product[]> => {
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .eq('is_promoted', true)
     .limit(10);
 
   if (error) {
