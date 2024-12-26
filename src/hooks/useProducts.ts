@@ -17,7 +17,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
 
   if (error) {
     console.error('Error fetching products:', error);
-    throw new Error(error.message);
+    throw new Error(`Failed to fetch products: ${error.message}`);
   }
 
   return data || [];
