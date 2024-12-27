@@ -4,9 +4,21 @@ import { Link } from "react-router-dom";
 import { ShoppingBag, Search, Package, Truck, Shield } from "lucide-react";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { useProducts } from "@/hooks/useProducts";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const { data: products, isLoading, error } = useProducts();
+  const { toast } = useToast();
+
+  // Show error toast if there's an error
+  if (error) {
+    console.error('Error loading products:', error);
+    toast({
+      variant: "destructive",
+      title: "Error loading products",
+      description: "Please try again later or contact support if the problem persists."
+    });
+  }
 
   if (isLoading) {
     return (
@@ -82,7 +94,13 @@ const Index = () => {
             <h2 className="text-3xl font-bold mb-4">Trending Products</h2>
             <p className="text-gray-600">Discover what's popular right now</p>
           </div>
-          <ProductGrid products={products?.slice(0, 8) || []} />
+          {error ? (
+            <div className="text-center text-gray-600">
+              Unable to load products at this time.
+            </div>
+          ) : (
+            <ProductGrid products={products?.slice(0, 8) || []} />
+          )}
           <div className="text-center mt-8">
             <Link to="/products">
               <Button variant="outline" size="lg">
