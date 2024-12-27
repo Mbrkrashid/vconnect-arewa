@@ -47,6 +47,54 @@ export type Database = {
           },
         ]
       }
+      brand_campaigns: {
+        Row: {
+          ad_placement: string | null
+          brand_name: string
+          budget: number
+          campaign_title: string
+          created_at: string | null
+          description: string | null
+          end_date: string
+          id: string
+          metrics: Json | null
+          start_date: string
+          status: string | null
+          target_audience: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          ad_placement?: string | null
+          brand_name: string
+          budget?: number
+          campaign_title: string
+          created_at?: string | null
+          description?: string | null
+          end_date: string
+          id?: string
+          metrics?: Json | null
+          start_date: string
+          status?: string | null
+          target_audience?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          ad_placement?: string | null
+          brand_name?: string
+          budget?: number
+          campaign_title?: string
+          created_at?: string | null
+          description?: string | null
+          end_date?: string
+          id?: string
+          metrics?: Json | null
+          start_date?: string
+          status?: string | null
+          target_audience?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       branded_effects: {
         Row: {
           created_at: string | null
@@ -302,6 +350,42 @@ export type Database = {
           role?: string | null
           updated_at?: string
           username?: string | null
+        }
+        Relationships: []
+      }
+      support_tickets: {
+        Row: {
+          assigned_to: string | null
+          created_at: string | null
+          customer_id: string | null
+          description: string
+          id: string
+          priority: string | null
+          status: string | null
+          subject: string
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string | null
+          customer_id?: string | null
+          description: string
+          id?: string
+          priority?: string | null
+          status?: string | null
+          subject: string
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string | null
+          customer_id?: string | null
+          description?: string
+          id?: string
+          priority?: string | null
+          status?: string | null
+          subject?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
