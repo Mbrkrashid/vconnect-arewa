@@ -1,3 +1,5 @@
+import { Json } from './common'
+
 export interface SupportTables {
   support_tickets: {
     Row: {

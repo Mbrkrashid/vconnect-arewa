@@ -1,11 +1,48 @@
-import { AdvertisingTables } from './advertising';
-import { SupportTables } from './support';
-import { Json } from './common';
+import { AdvertisingTables } from './advertising'
+import { SupportTables } from './support'
+import { Json } from './common'
 
 export interface Database {
   public: {
     Tables: {
-      ad_impressions: AdvertisingTables['ad_impressions']
+      ad_impressions: {
+        Row: {
+          device_info: Json | null
+          id: string
+          impression_type: string | null
+          location_info: Json | null
+          promotion_id: string | null
+          timestamp: string | null
+          user_id: string | null
+        }
+        Insert: {
+          device_info?: Json | null
+          id?: string
+          impression_type?: string | null
+          location_info?: Json | null
+          promotion_id?: string | null
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          device_info?: Json | null
+          id?: string
+          impression_type?: string | null
+          location_info?: Json | null
+          promotion_id?: string | null
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_impressions_promotion_id_fkey"
+            columns: ["promotion_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_promotions"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       brand_campaigns: AdvertisingTables['brand_campaigns']
       support_tickets: SupportTables['support_tickets']
       profiles: {
@@ -56,7 +93,7 @@ export interface Database {
           created_at?: string | null
           description?: string | null
           email: string
-          id?: string
+          id: string
           is_verified?: boolean | null
           opay_wallet_id?: string | null
           phone_number?: string | null
@@ -152,7 +189,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "vendors"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
       transactions: {
@@ -212,7 +249,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "vendors"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
       categories: {
@@ -281,7 +318,7 @@ export interface Database {
           thumbnail_url?: string | null
           title?: string
           updated_at?: string | null
-          vendor_id?: string
+          vendor_id: string
           video_url?: string
           views_count?: number | null
         }
@@ -292,7 +329,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "vendors"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
       video_comments: {
@@ -327,7 +364,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "video_content"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
       video_interactions: {
@@ -359,7 +396,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "video_content"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
     }
@@ -378,6 +415,6 @@ export interface Database {
   }
 }
 
-export type * from './common';
-export type * from './advertising';
-export type * from './support';
+export type * from './common'
+export type * from './advertising'
+export type * from './support'

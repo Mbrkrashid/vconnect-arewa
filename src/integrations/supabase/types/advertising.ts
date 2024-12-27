@@ -1,44 +1,6 @@
-import { Json } from './common';
+import { Json } from './common'
 
 export interface AdvertisingTables {
-  ad_impressions: {
-    Row: {
-      id: string
-      promotion_id: string | null
-      user_id: string | null
-      impression_type: string | null
-      timestamp: string | null
-      device_info: Json | null
-      location_info: Json | null
-    }
-    Insert: {
-      id?: string
-      promotion_id?: string | null
-      user_id?: string | null
-      impression_type?: string | null
-      timestamp?: string | null
-      device_info?: Json | null
-      location_info?: Json | null
-    }
-    Update: {
-      id?: string
-      promotion_id?: string | null
-      user_id?: string | null
-      impression_type?: string | null
-      timestamp?: string | null
-      device_info?: Json | null
-      location_info?: Json | null
-    }
-    Relationships: [
-      {
-        foreignKeyName: "ad_impressions_promotion_id_fkey"
-        columns: ["promotion_id"]
-        isOneToOne: false
-        referencedRelation: "vendor_promotions"
-        referencedColumns: ["id"]
-      }
-    ]
-  }
   brand_campaigns: {
     Row: {
       id: string
