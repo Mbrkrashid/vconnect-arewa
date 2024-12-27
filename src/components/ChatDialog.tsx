@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   id: number;
@@ -26,14 +27,14 @@ export function ChatDialog({ vendorName, open, onOpenChange }: ChatDialogProps) 
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: `Welcome! How can I help you today?`,
+      text: `Welcome to our customer support! How can I help you today?`,
       sender: "vendor",
       timestamp: new Date(),
     },
   ]);
   const [newMessage, setNewMessage] = useState("");
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
@@ -47,16 +48,29 @@ export function ChatDialog({ vendorName, open, onOpenChange }: ChatDialogProps) 
     setMessages([...messages, message]);
     setNewMessage("");
 
-    // Simulate vendor response after 1 second
-    setTimeout(() => {
-      const vendorResponse: Message = {
-        id: messages.length + 2,
-        text: "Thank you for your message. I'll get back to you shortly.",
-        sender: "vendor",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, vendorResponse]);
-    }, 1000);
+    // Store message in support history
+    try {
+      const { error } = await supabase.from("support_tickets").insert({
+        subject: "Chat Support",
+        description: newMessage,
+        priority: "medium",
+      });
+
+      if (error) throw error;
+
+      // Simulate vendor response after 1 second
+      setTimeout(() => {
+        const vendorResponse: Message = {
+          id: messages.length + 2,
+          text: "Thank you for your message. Our support team will get back to you shortly.",
+          sender: "vendor",
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, vendorResponse]);
+      }, 1000);
+    } catch (error) {
+      console.error("Error saving support message:", error);
+    }
   };
 
   return (
