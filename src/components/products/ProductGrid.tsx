@@ -13,18 +13,18 @@ export const ProductGrid = ({ products }: ProductGridProps) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {products.map((product) => (
-        <Card key={product.id} className="overflow-hidden group">
+        <Card key={product.id} className="group hover:shadow-lg transition-shadow duration-300">
           <Link to={`/product/${product.id}`}>
-            <div className="aspect-square overflow-hidden">
+            <div className="aspect-square overflow-hidden bg-gray-100 rounded-t-lg">
               <img
-                src={product.images[0] || "/placeholder.svg"}
+                src={product.images?.[0] || "/placeholder.svg"}
                 alt={product.name}
-                className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>
             <CardContent className="p-4">
               <div className="flex items-start justify-between gap-2">
-                <h3 className="font-medium line-clamp-2">{product.name}</h3>
+                <h3 className="font-medium line-clamp-2 text-sm">{product.name}</h3>
                 <Badge variant="secondary" className="shrink-0">
                   {product.category?.name}
                 </Badge>
@@ -38,16 +38,14 @@ export const ProductGrid = ({ products }: ProductGridProps) => {
                   ({product.reviews_count})
                 </span>
               </div>
-              <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
-                {product.description}
+              <p className="mt-2 text-lg font-bold text-purple-600">
+                ₦{product.price.toLocaleString()}
               </p>
             </CardContent>
-            <CardFooter className="p-4 pt-0 flex items-center justify-between">
-              <div className="text-lg font-bold">
-                ₦{product.price.toLocaleString()}
-              </div>
-              <Button size="sm" className="rounded-full">
-                <ShoppingCart className="w-4 h-4" />
+            <CardFooter className="p-4 pt-0">
+              <Button size="sm" className="w-full rounded-full">
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                Add to Cart
               </Button>
             </CardFooter>
           </Link>
