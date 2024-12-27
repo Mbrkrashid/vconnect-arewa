@@ -21,8 +21,6 @@ export interface Product {
 }
 
 export const fetchProducts = async (): Promise<Product[]> => {
-  console.log('Fetching products with Supabase client:', supabase);
-  
   try {
     const { data, error } = await supabase
       .from('products')
@@ -42,19 +40,13 @@ export const fetchProducts = async (): Promise<Product[]> => {
       .limit(20);
 
     if (error) {
-      console.error('Supabase error details:', {
-        message: error.message,
-        details: error.details,
-        hint: error.hint,
-        code: error.code
-      });
+      console.error('Supabase error:', error);
       throw error;
     }
 
-    console.log('Products fetched successfully:', data);
     return data || [];
   } catch (error) {
-    console.error('Error in fetchProducts:', error);
+    console.error('Error fetching products:', error);
     throw error;
   }
 };

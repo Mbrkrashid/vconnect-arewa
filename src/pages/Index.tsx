@@ -5,20 +5,23 @@ import { ShoppingBag, Search, Package, Truck, Shield } from "lucide-react";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { useProducts } from "@/hooks/useProducts";
 import { useToast } from "@/components/ui/use-toast";
+import { useEffect } from "react";
 
 const Index = () => {
   const { data: products, isLoading, error } = useProducts();
   const { toast } = useToast();
 
   // Show error toast if there's an error
-  if (error) {
-    console.error('Error loading products:', error);
-    toast({
-      variant: "destructive",
-      title: "Error loading products",
-      description: "Please try again later or contact support if the problem persists."
-    });
-  }
+  useEffect(() => {
+    if (error) {
+      console.error('Error loading products:', error);
+      toast({
+        variant: "destructive",
+        title: "Error loading products",
+        description: "Please try again later or contact support if the problem persists."
+      });
+    }
+  }, [error, toast]);
 
   if (isLoading) {
     return (
