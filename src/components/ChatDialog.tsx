@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface Message {
   id: number;
@@ -33,43 +34,57 @@ export function ChatDialog({ vendorName, open, onOpenChange }: ChatDialogProps) 
     },
   ]);
   const [newMessage, setNewMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() || isLoading) return;
 
-    const message: Message = {
+    const userMessage: Message = {
       id: messages.length + 1,
       text: newMessage,
       sender: "customer",
       timestamp: new Date(),
     };
 
-    setMessages([...messages, message]);
+    setMessages([...messages, userMessage]);
     setNewMessage("");
+    setIsLoading(true);
 
-    // Store message in support history
     try {
-      const { error } = await supabase.from("support_tickets").insert({
-        subject: "Chat Support",
-        description: newMessage,
-        priority: "medium",
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
+      // Call AI support agent
+      const response = await fetch('/api/ai-support-agent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: newMessage,
+          userId: user.id
+        }),
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error('Failed to get AI response');
 
-      // Simulate vendor response after 1 second
-      setTimeout(() => {
-        const vendorResponse: Message = {
-          id: messages.length + 2,
-          text: "Thank you for your message. Our support team will get back to you shortly.",
-          sender: "vendor",
-          timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, vendorResponse]);
-      }, 1000);
+      const data = await response.json();
+
+      const aiResponse: Message = {
+        id: messages.length + 2,
+        text: data.response,
+        sender: "vendor",
+        timestamp: new Date(),
+      };
+
+      setMessages(prev => [...prev, aiResponse]);
     } catch (error) {
-      console.error("Error saving support message:", error);
+      console.error('Error:', error);
+      toast.error("Failed to process message. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -111,8 +126,11 @@ export function ChatDialog({ vendorName, open, onOpenChange }: ChatDialogProps) 
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type your message..."
               className="flex-1"
+              disabled={isLoading}
             />
-            <Button type="submit">Send</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Sending..." : "Send"}
+            </Button>
           </form>
         </div>
       </DialogContent>
