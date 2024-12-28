@@ -36,10 +36,11 @@ export const fetchProducts = async (): Promise<Product[]> => {
       category:categories(name, slug),
       vendor:vendors(business_name)
     `)
-    .limit(20);
+    .limit(20)
+    .throwOnError();
 
   if (error) {
-    console.error('Supabase error:', error);
+    console.error('Error fetching products:', error);
     throw error;
   }
 
